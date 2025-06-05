@@ -28,7 +28,7 @@ const Story = () => {
             <div className="relative">
                 <div className="w-full h-80 bg-gradient-to-br from-gray-100 to-gray-200 rounded-2xl flex items-center justify-center">
                     <div className="w-48 h-48 bg-black rounded-full flex items-center justify-center shadow-2xl">
-                        <svg className="w-24 h-24 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg className="w-24 h-24 text-white rotate-side-to-side" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4"></path>
                         </svg>
                     </div>
@@ -38,17 +38,17 @@ const Story = () => {
         <Values/>
         <Stats/>
     </div>
-     <div class="bg-gray-100 py-16">
-        <div class="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
-            <h2 class="text-3xl font-bold text-gray-900 mb-6">Ready to Redefine Your Style?</h2>
-            <p class="text-lg text-gray-600 mb-8">
+     <div className="bg-gray-100 py-16">
+        <div className="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
+            <h2 className="text-3xl font-bold text-gray-900 mb-6">Ready to Redefine Your Style?</h2>
+            <p className="text-lg text-gray-600 mb-8">
                 Discover our collection of handcrafted caps designed for comfort, style, and durability.
             </p>
-            <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                <button class="bg-black text-white px-8 py-3 rounded-lg font-medium hover:bg-gray-800 transition-colors">
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <button className="bg-black text-white px-8 py-3 rounded-lg font-medium hover:bg-gray-800 transition-colors">
                     Shop Now
                 </button>
-                <button class="border border-gray-300 text-gray-700 px-8 py-3 rounded-lg font-medium hover:bg-gray-50 transition-colors">
+                <button className="border border-gray-300 text-gray-700 px-8 py-3 rounded-lg font-medium hover:bg-gray-50 transition-colors">
                     View Collections
                 </button>
             </div>

@@ -13,12 +13,25 @@ import {
   Phone,
   
 } from 'lucide-react';
+import AddToCart from './AddToCart';
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState(null);
-
+  const [isCartOpen, setIsCartOpen] = useState(false);
+  const [cartItems, setCartItems] = useState([
+    {
+      name: 'Black Snapback Cap',
+      price: 39.99, 
+      image: '../../../pexels-cottonbro-5119522.jpg',
+    },
+    {
+      name: 'Blue Denim Cap',
+      price: 29.99,
+      image: '../../../pexels-dzeninalukac-1376049.jpg',
+    },
+  ]);
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
@@ -31,24 +44,25 @@ const Navbar = () => {
     { name: 'Home', href: '/', icon: Home },
     { 
       name: 'Caps', 
-      href: '#',
+      href: '/caps',
       icon: PiBaseballCap,
-      dropdown: [
-        { name: 'Electronics', href: '#' },
-        { name: 'Fashion', href: '#' },
-        { name: 'Home & Garden', href: '#' },
-        { name: 'Sports', href: '#' },
-      ]
+      // dropdown: [
+      //   { name: 'Electronics', href: '#' },
+      //   { name: 'Fashion', href: '#' },
+      //   { name: 'Home & Garden', href: '#' },
+      //   { name: 'Sports', href: '#' },
+      //   { name: 'General', href: '#' },
+      // ]
     },
     { name: 'About', href: '/about', icon: Info },
-    { name: 'Contact', href: '#', icon: Phone },
+    { name: 'Contact', href: '/contact', icon: Phone },
   ];
 
   return (
     <div>
       <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         isScrolled 
-          ? 'bg-white/10 backdrop-blur-md shadow-lg border-b border-white/20' 
+          ? 'bg-white/50 text-black backdrop-blur-md shadow-lg border-b border-white/20' 
           : 'bg-white shadow-sm'
       }`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -119,16 +133,16 @@ const Navbar = () => {
               </div>
 
               {/* Cart */}
-              <button className="relative p-2 text-gray-600 hover:text-black hover:bg-slate-50 rounded-lg transition-all duration-200">
-                <ShoppingBag className="w-5 h-5" />
+              <button className="relative cursor-pointer p-2 text-gray-600 hover:text-black hover:bg-slate-50 rounded-lg transition-all duration-200">
+                <ShoppingBag className="w-5 h-5"  onClick={() => setIsCartOpen(true)} />
                 <span className="absolute -top-1 -right-1  w-4 h-4 bg-black text-white text-xs rounded-full flex items-center justify-center">
-                    <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-black opacity-75"></span>
+                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-black opacity-75"></span>
                     <span className="relative">3</span>
                 </span>
               </button>
 
               {/* User */}
-              <button className="p-2 text-gray-600 hover:text-black hover:bg-slate-50 rounded-lg transition-all duration-200">
+              <button className="p-2 cursor-pointer text-gray-600 hover:text-black hover:bg-slate-50 rounded-lg transition-all duration-200">
                 <User className="w-5 h-5" />
               </button>
 
@@ -188,7 +202,11 @@ const Navbar = () => {
           )}
         </div>
       </nav>
-
+<AddToCart
+ isOpen={isCartOpen}
+        onClose={() => setIsCartOpen(false)}
+        cartItems={cartItems} />
+        
     </div>
   );
 };

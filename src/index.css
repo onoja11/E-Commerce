@@ -1,1 +1,22 @@
 @import "tailwindcss";
+ .rotate-side-to-side {
+            animation: sideRotate 3s ease-in-out infinite;
+}
+
+html{
+    scroll-behavior: smooth;
+}
+        
+@keyframes sideRotate {
+    0%, 100% { transform: rotate(-15deg); }
+    50% { transform: rotate(15deg); }
+}
+.glass-effect {
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+.test{
+    /* scroll-behavior: smooth; */
+    
+}
