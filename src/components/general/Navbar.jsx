@@ -143,7 +143,9 @@ const Navbar = () => {
 
               {/* User */}
               <button className="p-2 cursor-pointer text-gray-600 hover:text-black hover:bg-slate-50 rounded-lg transition-all duration-200">
+                <a href="/login">
                 <User className="w-5 h-5" />
+                </a>
               </button>
 
               {/* Mobile Menu Button */}
