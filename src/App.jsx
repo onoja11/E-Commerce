@@ -8,6 +8,7 @@ import Caps from "./pages/Caps";
 import Preview from "./pages/Preview";
 import Login from "./pages/Auth/Login";
 import Register from "./pages/Auth/Register";
+import Dashboard from "./pages/Admin/Dashboard";
 
 
 const App = () => {
@@ -23,6 +24,7 @@ const App = () => {
         <Route path="/preview" element={<Preview/>} />
         <Route path="/login" element={<Login/>} />
         <Route path="/register" element={<Register/>} />
+        <Route path="/admin/dashboard" element={<Dashboard/>} />
       </Routes>
     </Router>
     <Footer/>
