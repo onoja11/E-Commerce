@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import axios from '../../api/axios'; // Adjust the import path as necessary
+import axios from '../../api/axios'; 
 
 
 const Login = () => {

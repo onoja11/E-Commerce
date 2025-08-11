@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { PiBaseballCap } from "react-icons/pi";
+import axios from '../../api/axios'; 
+
 import { 
   Menu, 
   X, 
@@ -11,7 +13,11 @@ import {
   Package,
   Info,
   Phone,
-  
+  Settings,
+  LogOut,
+  UserCircle,
+  LogIn,
+  UserPlus
 } from 'lucide-react';
 import AddToCart from './AddToCart';
 
@@ -20,6 +26,7 @@ const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState(null);
   const [isCartOpen, setIsCartOpen] = useState(false);
+  const [isUserDropdownOpen, setIsUserDropdownOpen] = useState(false);
   const [cartItems, setCartItems] = useState([
     {
       name: 'Black Snapback Cap',
@@ -32,6 +39,7 @@ const Navbar = () => {
       image: '../../../pexels-dzeninalukac-1376049.jpg',
     },
   ]);
+
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
@@ -39,6 +47,19 @@ const Navbar = () => {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  // Close dropdowns when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (!event.target.closest('.user-dropdown-container')) {
+        setIsUserDropdownOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  const token = localStorage.getItem("token");
 
   const navItems = [
     { name: 'Home', href: '/', icon: Home },
@@ -57,6 +78,34 @@ const Navbar = () => {
     { name: 'About', href: '/about', icon: Info },
     { name: 'Contact', href: '/contact', icon: Phone },
   ];
+
+  // User menu items when logged in
+  const authenticatedUserMenuItems = [
+    { name: 'Profile', href: '/profile', icon: UserCircle },
+    { name: 'Settings', href: '/settings', icon: Settings },
+    { name: 'Logout', href: '/logout', icon: LogOut, action: 'logout' },
+  ];
+
+  // User menu items when not logged in
+  const unauthenticatedUserMenuItems = [
+    { name: 'Login', href: '/login', icon: LogIn },
+    { name: 'Register', href: '/register', icon: UserPlus },
+  ];
+
+  // Choose the appropriate menu items based on authentication status
+  const userMenuItems = token ? authenticatedUserMenuItems : unauthenticatedUserMenuItems;
+
+  const handleLogout = async () => {
+  try {
+    await axios.post('/api/logout', {}, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+    localStorage.removeItem("token");
+    window.location.href = '/';
+  } catch (error) {
+    console.error("Logout error:", error);
+  }
+};
 
   return (
     <div>
@@ -141,12 +190,48 @@ const Navbar = () => {
                 </span>
               </button>
 
-              {/* User */}
-              <button className="p-2 cursor-pointer text-gray-600 hover:text-black hover:bg-slate-50 rounded-lg transition-all duration-200">
-                <a href="/login">
-                <User className="w-5 h-5" />
-                </a>
-              </button>
+              {/* User Dropdown - Now shows for both authenticated and unauthenticated users */}
+              <div className="relative user-dropdown-container">
+                <button 
+                  onClick={() => setIsUserDropdownOpen(!isUserDropdownOpen)}
+                  className={`flex items-center space-x-1 p-2 text-gray-600 hover:text-black rounded-lg transition-all duration-200 group ${
+                    isScrolled ? 'hover:bg-white/20' : 'hover:bg-slate-50'
+                  }`}
+                >
+                  <User className="w-5 h-5" />
+                  <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${
+                    isUserDropdownOpen ? 'rotate-180' : ''
+                  }`} />
+                </button>
+
+                {/* User Dropdown Menu */}
+                {isUserDropdownOpen && (
+                  <div className="absolute top-full right-0 mt-2 w-48 bg-white rounded-xl shadow-xl border border-gray-100 py-2 z-50">
+                    {userMenuItems.map((item) => (
+                      <div key={item.name}>
+                        {item.action === 'logout' ? (
+                          <button
+                            onClick={handleLogout}
+                            className="w-full flex items-center space-x-3 px-4 py-2 text-left text-gray-700 hover:text-red-600 hover:bg-red-50 transition-colors duration-200"
+                          >
+                            <item.icon className="w-4 h-4" />
+                            <span>{item.name}</span>
+                          </button>
+                        ) : (
+                          <a
+                            href={item.href}
+                            className="flex items-center space-x-3 px-4 py-2 text-gray-700 hover:text-black hover:bg-slate-50 transition-colors duration-200"
+                            onClick={() => setIsUserDropdownOpen(false)}
+                          >
+                            <item.icon className="w-4 h-4" />
+                            <span>{item.name}</span>
+                          </a>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
 
               {/* Mobile Menu Button */}
               <button
@@ -198,17 +283,42 @@ const Navbar = () => {
                   </div>
                 ))}
 
-                
+                {/* Mobile User Menu - Now shows for both authenticated and unauthenticated users */}
+                <div className="border-t border-gray-200 pt-4 mt-4">
+                  <div className="space-y-2">
+                    {userMenuItems.map((item) => (
+                      <div key={item.name}>
+                        {item.action === 'logout' ? (
+                          <button
+                            onClick={handleLogout}
+                            className="w-full flex items-center space-x-3 text-left text-gray-700 hover:text-red-600 py-3 transition-colors duration-200"
+                          >
+                            <item.icon className="w-5 h-5" />
+                            <span className="font-medium">{item.name}</span>
+                          </button>
+                        ) : (
+                          <a
+                            href={item.href}
+                            className="flex items-center space-x-3 text-gray-700 hover:text-slate-400 py-3 transition-colors duration-200"
+                          >
+                            <item.icon className="w-5 h-5" />
+                            <span className="font-medium">{item.name}</span>
+                          </a>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
               </div>
             </div>
           )}
         </div>
       </nav>
-<AddToCart
- isOpen={isCartOpen}
+      <AddToCart
+        isOpen={isCartOpen}
         onClose={() => setIsCartOpen(false)}
-        cartItems={cartItems} />
-        
+        cartItems={cartItems} 
+      />
     </div>
   );
 };

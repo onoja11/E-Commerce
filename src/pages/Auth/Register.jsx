@@ -5,13 +5,12 @@ const Register = () => {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
-    phone_number: "",
-    address: "",
     password: "",
     confirm_password: "",
   });
   
-  const [error, setError] = useState("");
+  const [errors, setErrors] = useState({});
+  const [generalError, setGeneralError] = useState("");
   const [success, setSuccess] = useState("");
 
   const handleChange = (e) => {
@@ -23,39 +22,46 @@ const Register = () => {
 
   const handleRegister = async (e) => {
     e.preventDefault();
-    setError("");
+    setErrors({});
+    setGeneralError("");
     setSuccess("");
 
-    if (formData.password !== formData.confirm_password) {
-      setError("Passwords do not match!");
-      return;
-    }
+    // if (formData.password !== formData.confirm_password) {
+    //   setErrors({ confirm_password: ["Passwords do not match!"] });
+    //   return;
+    // }
 
     try {
       // 1. Get CSRF cookie
-      await axios.get("/sanctum/csrf-cookie");
+       await axios.get("/sanctum/csrf-cookie");
 
       // 2. Send registration request
-      const response = await axios.post("api/register", {
+      const res = await axios.post("api/register", {
         name: formData.name,
         email: formData.email,
-        phone_number: formData.phone_number,
-        address: formData.address,
         password: formData.password,
-        password_confirmation: formData.confirm_password, // Laravel needs this
+        password_confirmation: formData.confirm_password,
       });
 
-      setSuccess("Registration successful! Redirecting...");
-      console.log(response.data);
+      console.log("Registration successful:", res.data);
 
-      // Optional: redirect to login after 1s
+      setSuccess("Registration successful! Redirecting...");
+
+      // Redirect to login after 1s
+      // localStorage.setItem("user", JSON.stringify(res.data.user));
+      localStorage.setItem("token", res.data.token);
       setTimeout(() => {
         window.location.href = "/";
       }, 1000);
 
     } catch (err) {
-      console.error(err.response?.data || err);
-      setError("Registration failed. Please check your details.");
+      console.error("Registration error:", err.response?.data);
+
+      if (err.response?.data?.errors) {
+        setErrors(err.response.data.errors);
+      } else {
+        setGeneralError("Registration failed. Please check your details.");
+      }
     }
   };
 
@@ -65,78 +71,57 @@ const Register = () => {
         <h2 className='text-2xl font-bold mb-6 text-center'>Register</h2>
 
         <form onSubmit={handleRegister}>
-          {error && <p className="text-red-500 text-center mb-4">{error}</p>}
+          {generalError && <p className="text-red-500 text-center mb-4">{generalError}</p>}
           {success && <p className="text-green-500 text-center mb-4">{success}</p>}
 
+          {/* Name */}
           <div className='mb-4'>
             <label className='block text-sm font-medium mb-2' htmlFor='name'>Full Name</label>
-            <input
+            <input 
               type='text'
               id='name'
               value={formData.name}
               onChange={handleChange}
               className='w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black'
-              required
             />
+            {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name[0]}</p>}
           </div>
 
+          {/* Email */}
           <div className='mb-4'>
             <label className='block text-sm font-medium mb-2' htmlFor='email'>Email</label>
-            <input
+            <input 
               type='email'
               id='email'
               value={formData.email}
               onChange={handleChange}
               className='w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black'
-              required
             />
+            {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email[0]}</p>}
           </div>
 
-          <div className='mb-4'>
-            <label className='block text-sm font-medium mb-2' htmlFor='phone_number'>Phone Number</label>
-            <input
-              type='tel'
-              id='phone_number'
-              value={formData.phone_number}
-              onChange={handleChange}
-              className='w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black'
-              required
-            />
-          </div>
-
-          <div className='mb-4'>
-            <label className='block text-sm font-medium mb-2' htmlFor='address'>Address</label>
-            <input
-              type='text'
-              id='address'
-              value={formData.address}
-              onChange={handleChange}
-              className='w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black'
-              required
-            />
-          </div>
-
+          {/* Password */}
           <div className='mb-6'>
             <label className='block text-sm font-medium mb-2' htmlFor='password'>Password</label>
-            <input
+            <input 
               type='password'
               id='password'
               value={formData.password}
               onChange={handleChange}
               className='w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black'
-              required
             />
+            {errors.password && <p className="text-red-500 text-sm mt-1">{errors.password[0]}</p>}
           </div>
 
+          {/* Confirm Password */}
           <div className='mb-6'>
             <label className='block text-sm font-medium mb-2' htmlFor='confirm_password'>Confirm Password</label>
-            <input
+            <input 
               type='password'
               id='confirm_password'
               value={formData.confirm_password}
               onChange={handleChange}
               className='w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black'
-              required
             />
           </div>
 
