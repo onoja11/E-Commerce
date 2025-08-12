@@ -60,6 +60,23 @@ const Navbar = () => {
   }, []);
 
   const token = localStorage.getItem("token");
+  const [user, setUser] = useState(null);
+
+
+  useEffect(() => {
+  if (token) {
+    axios.get('/api/user', {
+      headers: { Authorization: `Bearer ${token}` }
+    })
+    .then(response => {
+      setUser(response.data);
+    })
+    .catch(() => {
+      localStorage.removeItem("token");
+      setUser(null);
+    });
+  }
+}, [token]);
 
   const navItems = [
     { name: 'Home', href: '/', icon: Home },
@@ -189,6 +206,8 @@ const Navbar = () => {
                     <span className="relative">3</span>
                 </span>
               </button>
+                {user && <span className="font-medium hidden md:block">{user.name }</span>}
+
 
               {/* User Dropdown - Now shows for both authenticated and unauthenticated users */}
               <div className="relative user-dropdown-container">

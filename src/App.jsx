@@ -9,6 +9,10 @@ import Preview from "./pages/Preview";
 import Login from "./pages/Auth/Login";
 import Register from "./pages/Auth/Register";
 import Dashboard from "./pages/Admin/Dashboard";
+import CreateProducts from "./pages/Admin/products/CreateProducts";
+import ViewProducts from "./pages/Admin/products/ViewProducts";
+import CategoryList from "./pages/Admin/categories/CategoryList";
+import AddCategory from "./pages/Admin/categories/AddCategory";
 
 
 const App = () => {
@@ -26,6 +30,10 @@ const App = () => {
         <Route path="/login" element={!token ? <Login/> : <Navigate to={'/'}/>} />
         <Route path="/register" element={!token ? <Register/> : <Navigate to={'/'}/>} />
         <Route path="/admin/dashboard" element={<Dashboard/>} />
+        <Route path="/admin/create/product" element={<CreateProducts/>} />
+        <Route path="/admin/products" element={<ViewProducts/>} />
+        <Route path="/admin/categories" element={<CategoryList/>} />
+        <Route path="/admin/categories/add"  element={<AddCategory/>} />
       </Routes>
     </Router>
     <Footer/>
