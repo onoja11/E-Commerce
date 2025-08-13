@@ -1,61 +1,84 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Package, Tag, DollarSign, FileText, Image, Plus } from 'lucide-react'
+import axios from '../../../api/axios'
 
 const CreateProducts = () => {
   const [formData, setFormData] = useState({
     name: '',
     description: '',
     price: '',
-    category: '',
-    imageUrl: '',
+    category_id: '', // will store category ID
+    image: null,
     stock: ''
-  })
+  });
 
-  const categories = [
-    'Electronics',
-    'Clothing',
-    'Home & Garden',
-    'Books',
-    'Sports',
-    'Beauty',
-    'Automotive',
-    'Toys',
-    'Food & Beverage',
-    'Health'
-  ]
+  const [categories, setCategories] = useState([]);
+  const [loadingCategories, setLoadingCategories] = useState(true);
+  const token = localStorage.getItem('token');
+  // Fetch categories from API
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const res = await axios.get('/api/categories', {
+          headers: {  
+            Authorization: `Bearer ${localStorage.getItem('token')}`
+          }
+        });
+        setCategories(res.data); // Make sure API returns array of { id, name }
+      } catch (error) {
+        console.error('Error fetching categories:', error.response?.data || error.message);
+      } finally {
+        setLoadingCategories(false);
+      }
+    };
+    fetchCategories();
+  }, []);
 
   const handleInputChange = (e) => {
-    const { name, value } = e.target
+    const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
       [name]: value
-    }))
-  }
+    }));
+  };
 
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    console.log('Product data:', formData)
-    // Reset form
-    setFormData({
-      name: '',
-      description: '',
-      price: '',
-      category: '',
-      imageUrl: '',
-      stock: ''
-    })
-    alert('Product created successfully!')
+  const handleSubmit = async (e) => {
+  e.preventDefault();
+
+  const data = new FormData();
+  data.append('name', formData.name);
+  data.append('description', formData.description);
+  data.append('price', formData.price);
+  data.append('category_id', formData.category_id);
+  data.append('stock', formData.stock);
+  data.append('image', formData.image); // file
+
+
+  try {
+    const response = await axios.post('api/products', data, {
+      headers: { 'Content-Type': 'multipart/form-data', 
+            'Authorization': `Bearer ${token}`,
+
+       }
+      
+    });
+    window.location.href = '/admin/products'; 
+    console.log('Product created:', response.data);
+  } catch (error) {
+    console.error('Error creating product:', error);
   }
+};
+
 
   return (
-    <div className="min-h-screen my-8  py-12 px-4">
+    <div className="min-h-screen my-8 py-12 px-4">
       <div className="max-w-2xl mx-auto">
         {/* Header */}
         <div className="text-center my-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-black  to-gray-600 rounded-full mb-4 shadow-lg">
+          <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-black to-gray-600 rounded-full mb-4 shadow-lg">
             <Plus className="w-8 h-8 text-white" />
           </div>
-          <h1 className="text-3xl font-bold bg-gradient-to-r from-black  to-gray-600 bg-clip-text text-transparent mb-2">
+          <h1 className="text-3xl font-bold bg-gradient-to-r from-black to-gray-600 bg-clip-text text-transparent mb-2">
             Create New Product
           </h1>
           <p className="text-gray-600">Add your product details below</p>
@@ -75,7 +98,7 @@ const CreateProducts = () => {
               value={formData.name}
               onChange={handleInputChange}
               placeholder="Enter product name"
-              className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-black  focus:border-transparent transition-all duration-200 hover:border-gray-300"
+              className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-black focus:border-transparent transition-all duration-200 hover:border-gray-300"
               required
             />
           </div>
@@ -86,23 +109,27 @@ const CreateProducts = () => {
               <Tag className="w-4 h-4 mr-2 text-black " />
               Category
             </label>
-            <select
-              name="category"
-              value={formData.category}
-              onChange={handleInputChange}
-              className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-black  focus:border-transparent transition-all duration-200 hover:border-gray-300 bg-white"
-              required
-            >
-              <option value="">Select a category</option>
-              {categories.map((category) => (
-                <option key={category} value={category}>
-                  {category}
-                </option>
-              ))}
-            </select>
+            {loadingCategories ? (
+              <p className="text-gray-500">Loading categories...</p>
+            ) : (
+              <select
+                name="category_id"
+                value={formData.category_id}
+                onChange={handleInputChange}
+                className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-black focus:border-transparent transition-all duration-200 hover:border-gray-300 bg-white"
+                required
+              >
+                <option value="">Select a category</option>
+                {categories.map((category) => (
+                  <option key={category.id} value={category.id}>
+                    {category.name}
+                  </option>
+                ))}
+              </select>
+            )}
           </div>
 
-          {/* Price and Stock Row */}
+          {/* Price and Stock */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
               <label className="flex items-center text-sm font-semibold text-gray-700 mb-2">
@@ -117,11 +144,10 @@ const CreateProducts = () => {
                 placeholder="0.00"
                 step="0.01"
                 min="0"
-                className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-black  focus:border-transparent transition-all duration-200 hover:border-gray-300"
+                className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-black focus:border-transparent transition-all duration-200 hover:border-gray-300"
                 required
               />
             </div>
-
             <div className="space-y-2">
               <label className="flex items-center text-sm font-semibold text-gray-700 mb-2">
                 <Package className="w-4 h-4 mr-2 text-black " />
@@ -134,7 +160,7 @@ const CreateProducts = () => {
                 onChange={handleInputChange}
                 placeholder="0"
                 min="0"
-                className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-black  focus:border-transparent transition-all duration-200 hover:border-gray-300"
+                className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-black focus:border-transparent transition-all duration-200 hover:border-gray-300"
                 required
               />
             </div>
@@ -146,14 +172,15 @@ const CreateProducts = () => {
               <Image className="w-4 h-4 mr-2 text-black " />
               Image URL
             </label>
-            <input
-              type="url"
-              name="imageUrl"
-              value={formData.imageUrl}
-              onChange={handleInputChange}
-              placeholder="https://example.com/image.jpg"
-              className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-black  focus:border-transparent transition-all duration-200 hover:border-gray-300"
+           <input
+              type="file"
+              name="image"
+              accept="image/*"
+              onChange={(e) => setFormData({ ...formData, image: e.target.files[0] })}
+              className="w-full px-4 py-3 border border-gray-200 rounded-xl bg-gray-50 focus:ring-2 focus:ring-black focus:border-transparent transition-all duration-200 hover:border-gray-300"
+              required
             />
+
           </div>
 
           {/* Description */}
@@ -168,48 +195,24 @@ const CreateProducts = () => {
               onChange={handleInputChange}
               placeholder="Enter product description..."
               rows="4"
-              className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-black  focus:border-transparent transition-all duration-200 hover:border-gray-300 resize-none"
+              className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-black focus:border-transparent transition-all duration-200 hover:border-gray-300 resize-none"
               required
             />
           </div>
 
-          {/* Submit Button */}
+          {/* Submit */}
           <div className="pt-4">
             <button
               type="submit"
-              className="w-full bg-gradient-to-r from-black  to-gray-600 text-white py-3 px-6 rounded-xl font-semibold hover:from-black  hover:to-gray-700 focus:ring-2 focus:ring-black  focus:ring-offset-2 transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98] shadow-lg hover:shadow-xl"
+              className="w-full bg-gradient-to-r from-black to-gray-600 text-white py-3 px-6 rounded-xl font-semibold hover:from-black hover:to-gray-700 focus:ring-2 focus:ring-black focus:ring-offset-2 transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98] shadow-lg hover:shadow-xl"
             >
               Create Product
             </button>
           </div>
         </form>
-
-        {/* Preview Card */}
-        {(formData.name || formData.category || formData.price) && (
-          <div className="mt-8 bg-white rounded-2xl shadow-xl p-6 border border-gray-100">
-            <h3 className="text-lg font-semibold text-gray-800 mb-4">Preview</h3>
-            <div className="flex items-start space-x-4">
-              <div className="w-20 h-20 bg-gradient-to-br from-gray-100 to-gray-200 rounded-lg flex items-center justify-center">
-                {formData.imageUrl ? (
-                  <img src={formData.imageUrl} alt="Preview" className="w-full h-full object-cover rounded-lg" onError={(e) => e.target.style.display = 'none'} />
-                ) : (
-                  <Package className="w-8 h-8 text-gray-400" />
-                )}
-              </div>
-              <div className="flex-1">
-                <h4 className="font-semibold text-gray-800">{formData.name || 'Product Name'}</h4>
-                <p className="text-sm text-black  mb-1">{formData.category || 'Category'}</p>
-                <p className="text-lg font-bold text-green-600">${formData.price || '0.00'}</p>
-                {formData.description && (
-                  <p className="text-sm text-gray-600 mt-2 line-clamp-2">{formData.description}</p>
-                )}
-              </div>
-            </div>
-          </div>
-        )}
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default CreateProducts
+export default CreateProducts;

@@ -17,7 +17,8 @@ import {
   LogOut,
   UserCircle,
   LogIn,
-  UserPlus
+  UserPlus,
+  ChartBarStacked,
 } from 'lucide-react';
 import AddToCart from './AddToCart';
 
@@ -79,46 +80,53 @@ const Navbar = () => {
 }, [token]);
 
   const navItems = [
-    { name: 'Home', href: '/', icon: Home },
+    { name: 'Home', to: '/', icon: Home },
     { 
       name: 'Caps', 
-      href: '/caps',
+      to: '/caps',
       icon: PiBaseballCap,
       // dropdown: [
-      //   { name: 'Electronics', href: '#' },
-      //   { name: 'Fashion', href: '#' },
-      //   { name: 'Home & Garden', href: '#' },
-      //   { name: 'Sports', href: '#' },
-      //   { name: 'General', href: '#' },
+      //   { name: 'Electronics', to: '#' },
+      //   { name: 'Fashion', to: '#' },
+      //   { name: 'Home & Garden', to: '#' },
+      //   { name: 'Sports', to: '#' },
+      //   { name: 'General', to: '#' },
       // ]
     },
-    { name: 'About', href: '/about', icon: Info },
-    { name: 'Contact', href: '/contact', icon: Phone },
+    { name: 'About', to: '/about', icon: Info },
+    { name: 'Contact', to: '/contact', icon: Phone },
   ];
 
   // User menu items when logged in
   const authenticatedUserMenuItems = [
-    { name: 'Profile', href: '/profile', icon: UserCircle },
-    { name: 'Settings', href: '/settings', icon: Settings },
-    { name: 'Logout', href: '/logout', icon: LogOut, action: 'logout' },
+    { name: 'Profile', to: '/profile', icon: UserCircle },
+    { name: 'Settings', to: '/settings', icon: Settings },
+    { name: 'Logout', to: '/logout', icon: LogOut, action: 'logout' },
+  ];
+
+  const authenticatedAdminMenuItems = [
+    { name: 'Products', to: '/admin/products', icon: Package },
+    { name: 'Categories', to: '/admin/categories', icon:  ChartBarStacked },
   ];
 
   // User menu items when not logged in
   const unauthenticatedUserMenuItems = [
-    { name: 'Login', href: '/login', icon: LogIn },
-    { name: 'Register', href: '/register', icon: UserPlus },
+    { name: 'Login', to: '/login', icon: LogIn },
+    { name: 'Register', to: '/register', icon: UserPlus },
   ];
 
   // Choose the appropriate menu items based on authentication status
   const userMenuItems = token ? authenticatedUserMenuItems : unauthenticatedUserMenuItems;
-
+if(user && user.role === 'admin') {
+  userMenuItems.unshift(...authenticatedAdminMenuItems);
+}
   const handleLogout = async () => {
   try {
     await axios.post('/api/logout', {}, {
       headers: { Authorization: `Bearer ${token}` }
     });
     localStorage.removeItem("token");
-    window.location.href = '/';
+    window.location.to = '/';
   } catch (error) {
     console.error("Logout error:", error);
   }
@@ -153,7 +161,7 @@ const Navbar = () => {
                   onMouseLeave={() => setActiveDropdown(null)}
                 >
                   <a
-                    href={item.href}
+                    to={item.to}
                     className={`flex items-center space-x-1 text-gray-700 hover:text-black p-2 rounded transition-colors duration-200 font-medium group
                       ${
                         isScrolled ?
@@ -174,7 +182,7 @@ const Navbar = () => {
                       {item.dropdown.map((dropItem) => (
                         <a
                           key={dropItem.name}
-                          href={dropItem.href}
+                          to={dropItem.to}
                           className="block px-4 py-2 text-gray-700 hover:text-black hover:bg-slate-50 transition-colors duration-200"
                         >
                           {dropItem.name}
@@ -238,7 +246,7 @@ const Navbar = () => {
                           </button>
                         ) : (
                           <a
-                            href={item.href}
+                            to={item.to}
                             className="flex items-center space-x-3 px-4 py-2 text-gray-700 hover:text-black hover:bg-slate-50 transition-colors duration-200"
                             onClick={() => setIsUserDropdownOpen(false)}
                           >
@@ -280,7 +288,7 @@ const Navbar = () => {
                 {navItems.map((item) => (
                   <div key={item.name}>
                     <a
-                      href={item.href}
+                      to={item.to}
                       className="flex items-center space-x-3 text-gray-700 hover:text-slate-400 py-3 transition-colors duration-200"
                     >
                       <item.icon className="w-5 h-5" />
@@ -291,7 +299,7 @@ const Navbar = () => {
                         {item.dropdown.map((dropItem) => (
                           <a
                             key={dropItem.name}
-                            href={dropItem.href}
+                            to={dropItem.to}
                             className="block text-gray-600 hover:text-black py-1 transition-colors duration-200"
                           >
                             {dropItem.name}
@@ -317,7 +325,7 @@ const Navbar = () => {
                           </button>
                         ) : (
                           <a
-                            href={item.href}
+                            to={item.to}
                             className="flex items-center space-x-3 text-gray-700 hover:text-slate-400 py-3 transition-colors duration-200"
                           >
                             <item.icon className="w-5 h-5" />

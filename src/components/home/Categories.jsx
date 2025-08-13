@@ -1,10 +1,25 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import pic1 from '../../assets/pexels-cottonbro-5119522.jpg'
 import pic2 from '../../assets/pexels-dzeninalukac-1376049.jpg'
 import pic3 from '../../assets/pexels-enginakyurt-1642228.jpg'
 import Category from './Category'
+import axios from '../../api/axios'
 
 const Categories = () => {
+    const [categories, setCategories] = useState([]);
+    useEffect(() => {
+        const fetchCategories = async () => {
+            try {
+                const res = await axios.get('/api/categories');
+                setCategories(res.data); // Make sure API returns array of { id, name }
+            } catch (error) {
+                console.error('Error fetching categories:', error.response?.data || error.message
+                );
+            }
+        }
+        fetchCategories();
+    }, []);
+
   return (
       <div className="bg-gray-50 py-12 sm:py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -18,9 +33,14 @@ const Categories = () => {
             </div>
 
             <div className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                <Category category={'Sports Collection'} pic={pic1} description={'Designed for performance and style.'}/>
-                <Category category={'Fashion Statements'} pic={pic2} description={'Elevate your everyday look.'}/>
-                <Category category={'Limited Editions'} pic={pic3} description={'Unique designs, limited quantities.'}/>        
+              
+                {categories.slice(0, 3).map(category => (
+                    <Category
+                        category={category.name}
+                        pic={pic1}
+                        description={category.id}
+                    />
+                ))}
             </div>
         </div>
     </div>

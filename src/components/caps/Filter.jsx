@@ -1,7 +1,21 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Layers, Globe } from 'lucide-react'
+import axios from '../../api/axios'
 
 const Filter = () => {
+    const [categories, setCategories] = useState([]);
+    useEffect(() => {
+        const fetchCategories = async () => {
+            try {
+                const res = await axios.get('/api/categories');
+                setCategories(res.data); // Make sure API returns array of { id, name }
+            } catch (error) {
+                console.error('Error fetching categories:', error.response?.data || error.message
+                );
+            }
+        }
+        fetchCategories();
+    }, []);
       document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
@@ -15,18 +29,11 @@ const Filter = () => {
                 <button className="category-btn cursor-pointer px-6 md:py-3 bg-white/30 rounded-full text-white text-sm font-medium hover:bg-white/60 hover:bg-opacity-20 hover:text-black focus:outline-none focus:ring-1 focus:ring-gray-200">
                     <Layers/>
                 </button>
-                <button className="category-btn cursor-pointer px-6 py-3 bg-white/30 rounded-full text-white font-medium hover:bg-white/60 hover:text-black hover:bg-opacity-20 focus:outline-none focus:ring-2 focus:ring-gray-500">
-                    Baseball
-                </button>
-                <button className="category-btn cursor-pointer px-6 py-3 bg-white/30 rounded-full text-white font-medium hover:bg-white/60 hover:text-black hover:bg-opacity-20 focus:outline-none focus:ring-2 focus:ring-gray-500">
-                    Snapback
-                </button>
-                <button className="category-btn cursor-pointer px-6 py-3 bg-white/30 rounded-full text-white font-medium hover:bg-white/60 hover:text-black hover:bg-opacity-20 focus:outline-none focus:ring-2 focus:ring-gray-500">
-                    Trucker
-                </button>
-                <button className="category-btn cursor-pointer px-6 py-3 bg-white/30 rounded-full text-white font-medium hover:bg-white/60 hover:text-black hover:bg-opacity-20 focus:outline-none focus:ring-2 focus:ring-gray-500">
-                    Vintage
-                </button>
+                {categories.map(category => (
+                    <a key={category.id} href={`#${category.name}`} className="category-btn cursor-pointer px-6 md:py-3 bg-white/30 rounded-full text-white text-sm font-medium hover:bg-white/60 hover:bg-opacity-20 hover:text-black focus:outline-none focus:ring-1 focus:ring-gray-200">
+                        {category.name}
+                    </a>
+                ))}
             </div>
               )
 }

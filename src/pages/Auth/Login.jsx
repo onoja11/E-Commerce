@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from '../../api/axios'; 
 
 
@@ -6,6 +6,7 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [user, setUser] = useState(null);
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -21,6 +22,10 @@ const Login = () => {
         password
       });
       console.log(response.data);
+          localStorage.setItem("token", response.data.token);
+          localStorage.setItem("user", JSON.stringify(response.data.user));
+      setUser(response.data.user);
+
 
       // Optionally redirect to dashboard
       window.location.href = "/";
@@ -29,7 +34,6 @@ const Login = () => {
       setError("Invalid credentials or login failed");
     }
   };
-
   return (
     <div className='flex items-center justify-center min-h-screen mt-5 bg-gray-100'>
       <div className='bg-white p-8 my-28 rounded-lg shadow-lg w-full max-w-md'>

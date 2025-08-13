@@ -1,32 +1,24 @@
 import React, { useEffect, useState } from "react";
 import { Package, Tag, DollarSign, Edit3, Trash2, Plus } from "lucide-react";
+import Product from "../../../components/general/Product";
+import axios from "../../../api/axios";
 
 const ViewProducts = () => {
   const [products, setProducts] = useState([]);
 
   // Simulated fetch (replace with your API call)
-  useEffect(() => {
-    setProducts([
-      {
-        id: 1,
-        name: "Wireless Headphones",
-        category: "Electronics",
-        price: 99.99,
-        stock: 15,
-        imageUrl: "https://via.placeholder.com/150",
-        description: "High-quality wireless headphones with noise cancellation."
-      },
-      {
-        id: 2,
-        name: "Yoga Mat",
-        category: "Sports",
-        price: 29.99,
-        stock: 50,
-        imageUrl: "https://via.placeholder.com/150",
-        description: "Comfortable and durable yoga mat for all exercises."
-      }
-    ]);
-  }, []);
+   useEffect(() => {
+      const fetchProducts = async () => {
+        try {
+          const res = await axios.get('/api/products');
+          setProducts(res.data); // Make sure API returns array of { id, name }
+        } catch (error) {
+          console.error('Error fetching categories:', error.response?.data || error.message);
+        } 
+      };
+      fetchProducts();
+    }, []);
+    console.log(products);
 
   const handleDelete = (id) => {
     if (window.confirm("Are you sure you want to delete this product?")) {
@@ -56,64 +48,25 @@ const ViewProducts = () => {
             </div>
           </div>
 
-          <button className="flex items-center bg-gradient-to-r from-black to-gray-600 text-white px-4 py-2 rounded-xl shadow hover:scale-[1.02] transition-all">
-            <Plus className="w-4 h-4 mr-2" /> Add Product
-          </button>
+            <a href="/admin/create/product"  className="flex items-center bg-gradient-to-r from-black to-gray-600 text-white px-4 py-2 rounded-xl shadow hover:scale-[1.02] transition-all">
+            <Plus className="w-4 h-4 " /> Add Product
+            </a>
         </div>
 
         {/* Products Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {products.map((product) => (
-            <div
+            <Product textColor="text-gray-800"
+            border="border border-gray-200 shadow-lg"
               key={product.id}
-              className="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden flex flex-col"
-            >
-              <div className="h-48 bg-gray-100 flex items-center justify-center">
-                {product.imageUrl ? (
-                  <img
-                    src={product.imageUrl}
-                    alt={product.name}
-                    className="w-full h-full object-cover"
-                  />
-                ) : (
-                  <Package className="w-12 h-12 text-gray-400" />
-                )}
-              </div>
-
-              <div className="p-6 flex-1 flex flex-col">
-                <h2 className="font-bold text-lg text-gray-800">
-                  {product.name}
-                </h2>
-                <p className="text-sm text-gray-500 mb-1 flex items-center">
-                  <Tag className="w-4 h-4 mr-1" /> {product.category}
-                </p>
-                <p className="text-lg font-bold text-green-600 flex items-center mb-2">
-                  <DollarSign className="w-4 h-4 mr-1" /> {product.price}
-                </p>
-                <p className="text-sm text-gray-600 mb-4 line-clamp-3">
-                  {product.description}
-                </p>
-                <p className="text-xs text-gray-400 mb-4">
-                  Stock: {product.stock}
-                </p>
-
-                {/* Action buttons */}
-                <div className="mt-auto flex space-x-2">
-                  <button
-                    onClick={() => handleEdit(product.id)}
-                    className="flex-1 bg-yellow-500 hover:bg-yellow-600 text-white py-2 px-3 rounded-lg flex items-center justify-center transition-all"
-                  >
-                    <Edit3 className="w-4 h-4 mr-1" /> Edit
-                  </button>
-                  <button
-                    onClick={() => handleDelete(product.id)}
-                    className="flex-1 bg-red-500 hover:bg-red-600 text-white py-2 px-3 rounded-lg flex items-center justify-center transition-all"
-                  >
-                    <Trash2 className="w-4 h-4 mr-1" /> Delete
-                  </button>
-                </div>
-              </div>
-            </div>
+              name={product.name}
+              description={product.description}
+              price={`$${product.price.toFixed(2)}`}
+              pic={`http://kovecaps_api.test/${product.image}`}
+              stock={product.stock}
+              onDelete={handleDelete}
+              onEdit={handleEdit}
+            />
           ))}
         </div>
 

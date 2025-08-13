@@ -1,10 +1,23 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Product from '../general/Product'
 import pic1 from '../../assets/pexels-cottonbro-5119522.jpg'
 import pic2 from '../../assets/pexels-dzeninalukac-1376049.jpg'
 import pic3 from '../../assets/pexels-enginakyurt-1642228.jpg'
+import axios from '../../api/axios'
 
 const Products = () => {
+    const [products, setProducts] = useState([]);
+    useEffect(() => {
+        const fetchProducts = async () => {
+            try {
+                const res = await axios.get('/api/products');
+                setProducts(res.data); // Make sure API returns array of { id, name }
+            } catch (error) {
+                console.error('Error fetching products:', error.response?.data || error.message);
+            }
+        }
+        fetchProducts();
+    })
   return (
   <div className="bg-gradient-to-br from-gray-900 via-gray-800 to-black  py-12 sm:py-16">
         <div className="max-w-7xl  mx-auto px-4 sm:px-6 lg:px-8">
@@ -17,10 +30,18 @@ const Products = () => {
                 </p>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mt-10">
-                <Product name={'Urban Street Cap'} description={'Black'} pic={pic1} price={`$10`}/>
-            <Product name={'Vintage Trucker'} description={'Blue/White'} pic={pic2} price={`$40`} />
-            <Product name={'Sport Performance'} description={'Red'} pic={pic3} price={`$99.9`}/>
-            <Product name={'Premium Fitted'} description={'Gray'} pic={pic1} price={`$230`}/>
+                {products.slice(0,4).map(product => (
+                    <Product
+                        key={product.id}
+                        name={product.name}
+                        description={product.description}
+                        price={`$${product.price.toFixed(2)}`}
+                        pic={`http://kovecaps_api.test/${product.image}`}
+                        stock={product.stock}
+                        border="border border-gray-200 shadow-lg"
+                    />
+                ))}
+                
             </div>
             
             </div>

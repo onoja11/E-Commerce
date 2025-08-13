@@ -1,8 +1,20 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Product from '../general/Product'
 import Filter from './Filter'
-
+import axios from '../../api/axios'
 const MainContent = () => {
+    const [products, setProducts] = useState([]);
+     useEffect(() => {
+      const fetchProducts = async () => {
+        try {
+          const res = await axios.get('/api/products');
+          setProducts(res.data); // Make sure API returns array of { id, name }
+        } catch (error) {
+          console.error('Error fetching categories:', error.response?.data || error.message);
+        } 
+      };
+      fetchProducts();
+    }, []);
   return (
 <section id="collection" className="py-20 px-6 ">
         <div className="max-w-7xl mx-auto ">
@@ -21,19 +33,19 @@ const MainContent = () => {
 
             {/* <!-- Caps Grid --> */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 md:px-5 gap-8">
-                {/* <!-- Cap Card 1 --> */}
-                <Product name={'ClassNameic Baseball Cap'} description={'Premium cotton blend with adjustable strap'} pic={'/pexels-cottonbro-5119522.jpg'} price={'$29.99'}/>
-                <Product name={'Urban Snapback'} description={'Street-style design with flat brim'} pic={'/pexels-dzeninalukac-1376049.jpg'} price={'$34.99'}/>
-                <Product name={'ClassNameic Baseball Cap'} description={'Premium cotton blend with adjustable strap'} pic={'/pexels-cottonbro-5119522.jpg'} price={'$29.99'}/>
-                <Product name={'Urban Snapback'} description={'Street-style design with flat brim'} pic={'/pexels-dzeninalukac-1376049.jpg'} price={'$34.99'}/>
-                <Product name={'ClassNameic Baseball Cap'} description={'Premium cotton blend with adjustable strap'} pic={'/pexels-cottonbro-5119522.jpg'} price={'$29.99'}/>
-                <Product name={'Urban Snapback'} description={'Street-style design with flat brim'} pic={'/pexels-dzeninalukac-1376049.jpg'} price={'$34.99'}/>
-                <Product name={'ClassNameic Baseball Cap'} description={'Premium cotton blend with adjustable strap'} pic={'/pexels-cottonbro-5119522.jpg'} price={'$29.99'}/>
-                <Product name={'Urban Snapback'} description={'Street-style design with flat brim'} pic={'/pexels-dzeninalukac-1376049.jpg'} price={'$34.99'}/>
-                {/* <!-- Cap Card 2 --> */}
-                            {/* <svg className="w-16 h-16 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
-                                <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                            </svg> */}
+               {products.map((product) => (
+            <Product textColor="text-gray-800"
+            border="border border-gray-200 shadow-lg"
+              key={product.id}
+              name={product.name}
+              description={product.description}
+              price={`$${product.price.toFixed(2)}`}
+              pic={`http://kovecaps_api.test/${product.image}`}
+              stock={product.stock}
+             
+            />
+          ))}
+                
                
             </div>
         </div>

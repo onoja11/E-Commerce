@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from '../../api/axios'; 
 
 const Register = () => {
@@ -12,6 +12,10 @@ const Register = () => {
   const [errors, setErrors] = useState({});
   const [generalError, setGeneralError] = useState("");
   const [success, setSuccess] = useState("");
+  const [user, setUser] = useState(null);
+  
+  
+    
 
   const handleChange = (e) => {
     setFormData({
@@ -49,7 +53,7 @@ const Register = () => {
 
       // Redirect to login after 1s
       // localStorage.setItem("user", JSON.stringify(res.data.user));
-      localStorage.setItem("token", res.data.token);
+      const token = localStorage.setItem("token", res.data.token);
       setTimeout(() => {
         window.location.href = "/";
       }, 1000);
@@ -64,6 +68,23 @@ const Register = () => {
       }
     }
   };
+  const token = localStorage.getItem("token");
+  useEffect(() => {
+    if (token) {
+      axios.get('/api/user', {
+        headers: { Authorization: `Bearer ${token}` }
+      })
+      .then(response => {
+        setUser(response.data);
+      })
+      .catch(() => {
+        localStorage.removeItem("token");
+        setUser(null);
+      });
+    }
+  }, [token]);
+  
+  localStorage.setItem("user", JSON.stringify(user));
 
   return (
     <div className='flex items-center justify-center min-h-screen mt-5 bg-gray-100'>
