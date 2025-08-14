@@ -4,12 +4,16 @@ import { BiCartAdd } from 'react-icons/bi'
 
 const Product = ({name , description , pic, price,border,stock, textColor = 'text-white'}) => {
   return (
-     <div className={`${border} stagger-animation cursor-pointer    glass-effect rounded-2xl overflow-hidden group`}>
+<div className={`${border} stagger-animation cursor-pointer    glass-effect rounded-2xl overflow-hidden group`}>
                     <div className="image-placeholder h-64 relative">
                         <div className="absolute overflow-hidden inset-0 bg-gradient-to-br from-gray-200 to-gray-300 flex items-center justify-center">
                             {/* <svg className="w-16 h-16 text-gray-500" fill="currentColor" viewBox="0 0 20 20">
                                 <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
                             </svg> */}
+                            <div className="absolute top-3 left-3 bg-gradient-to-r from-green-400 to-emerald-500 px-3 py-1 text-white text-xs font-semibold rounded-full shadow-lg border border-white/20 backdrop-blur-sm animate-pulse">
+                                <span className="inline-block w-2 h-2 bg-white rounded-full mr-2 animate-ping"></span>
+                                ACTIVE
+                            </div>
                             <img className='w-full h-full object-center  group-hover:scale-105 object-cover' src={pic} alt="" />
                         </div>
                         <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
@@ -26,25 +30,6 @@ const Product = ({name , description , pic, price,border,stock, textColor = 'tex
                         </div>
                     </div>
                 </div>
-
-    // <div className="group relative product-card fade-in">
-    //                 <div className="w-full h-50 bg-gray-200 aspect-w-1 aspect-h-1 rounded-md overflow-hidden lg:h-80">
-    //                     <img src={pic} alt="Cap example" className="w-full h-full object-center object-cover"/>
-    //                 </div>
-    //                 <div className="mt-4 flex justify-between">
-    //                     <div>
-    //                         <h3 className="text-sm text-gray-700">
-    //                             <a href="#">
-    //                                 <span aria-hidden="true" className="absolute inset-0"></span>
-    //                                 {name}
-    //                             </a>
-    //                         </h3>
-    //                         <p className="mt-1 text-sm text-gray-500">{color}</p>
-    //                     </div>
-    //                     <p className="text-sm font-medium text-gray-900">{price}</p>
-    //                 </div>
-    //                 <button className="mt-4 w-full bg-black text-white py-2 rounded  hover:bg-red-900 transition duration-300 flex align-middle justify-center "><BiCartAdd/> Add to Cart</button>
-    //             </div> 
                  )
 }
 

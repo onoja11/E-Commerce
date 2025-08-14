@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { PiBaseballCap } from "react-icons/pi";
+import { Link, useNavigate } from 'react-router-dom'; 
 import axios from '../../api/axios'; 
 
 import { 
@@ -27,6 +28,7 @@ const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState(null);
   const [isCartOpen, setIsCartOpen] = useState(false);
+  const navigate = useNavigate();
   const [isUserDropdownOpen, setIsUserDropdownOpen] = useState(false);
   const [cartItems, setCartItems] = useState([
     {
@@ -49,7 +51,6 @@ const Navbar = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Close dropdowns when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (!event.target.closest('.user-dropdown-container')) {
@@ -63,41 +64,28 @@ const Navbar = () => {
   const token = localStorage.getItem("token");
   const [user, setUser] = useState(null);
 
-
   useEffect(() => {
-  if (token) {
-    axios.get('/api/user', {
-      headers: { Authorization: `Bearer ${token}` }
-    })
-    .then(response => {
-      setUser(response.data);
-    })
-    .catch(() => {
-      localStorage.removeItem("token");
-      setUser(null);
-    });
-  }
-}, [token]);
+    if (token) {
+      axios.get('/api/user', {
+        headers: { Authorization: `Bearer ${token}` }
+      })
+      .then(response => {
+        setUser(response.data);
+      })
+      .catch(() => {
+        localStorage.removeItem("token");
+        setUser(null);
+      });
+    }
+  }, [token]);
 
   const navItems = [
     { name: 'Home', to: '/', icon: Home },
-    { 
-      name: 'Caps', 
-      to: '/caps',
-      icon: PiBaseballCap,
-      // dropdown: [
-      //   { name: 'Electronics', to: '#' },
-      //   { name: 'Fashion', to: '#' },
-      //   { name: 'Home & Garden', to: '#' },
-      //   { name: 'Sports', to: '#' },
-      //   { name: 'General', to: '#' },
-      // ]
-    },
+    { name: 'Caps', to: '/caps', icon: PiBaseballCap },
     { name: 'About', to: '/about', icon: Info },
     { name: 'Contact', to: '/contact', icon: Phone },
   ];
 
-  // User menu items when logged in
   const authenticatedUserMenuItems = [
     { name: 'Profile', to: '/profile', icon: UserCircle },
     { name: 'Settings', to: '/settings', icon: Settings },
@@ -106,31 +94,30 @@ const Navbar = () => {
 
   const authenticatedAdminMenuItems = [
     { name: 'Products', to: '/admin/products', icon: Package },
-    { name: 'Categories', to: '/admin/categories', icon:  ChartBarStacked },
+    { name: 'Categories', to: '/admin/categories', icon: ChartBarStacked },
   ];
 
-  // User menu items when not logged in
   const unauthenticatedUserMenuItems = [
     { name: 'Login', to: '/login', icon: LogIn },
     { name: 'Register', to: '/register', icon: UserPlus },
   ];
 
-  // Choose the appropriate menu items based on authentication status
   const userMenuItems = token ? authenticatedUserMenuItems : unauthenticatedUserMenuItems;
-if(user && user.role === 'admin') {
-  userMenuItems.unshift(...authenticatedAdminMenuItems);
-}
-  const handleLogout = async () => {
-  try {
-    await axios.post('/api/logout', {}, {
-      headers: { Authorization: `Bearer ${token}` }
-    });
-    localStorage.removeItem("token");
-    window.location.to = '/';
-  } catch (error) {
-    console.error("Logout error:", error);
+  if (user && user.role === 'admin') {
+    userMenuItems.unshift(...authenticatedAdminMenuItems);
   }
-};
+
+  const handleLogout = async () => {
+    try {
+      await axios.post('/api/logout', {}, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      window.location = "/";
+      localStorage.removeItem("token");
+    } catch (error) {
+      console.error("Logout error:", error);
+    }
+  };
 
   return (
     <div>
@@ -141,15 +128,16 @@ if(user && user.role === 'admin') {
       }`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
+            
             {/* Logo */}
-            <div className="flex items-center space-x-2">
+            <Link to="/" className="flex items-center space-x-2">
               <div className="w-8 h-8 bg-gradient-to-r from-black to-slate-500 rounded-lg flex items-center justify-center">
                 <span className="text-white font-bold text-sm">K</span>
               </div>
               <span className="font-bold text-xl bg-gradient-to-r from-black to-slate-500 bg-clip-text text-transparent">
                 koveCaps
               </span>
-            </div>
+            </Link>
 
             {/* Desktop Navigation */}
             <div className="hidden md:flex items-center space-x-8">
@@ -160,33 +148,28 @@ if(user && user.role === 'admin') {
                   onMouseEnter={() => item.dropdown && setActiveDropdown(item.name)}
                   onMouseLeave={() => setActiveDropdown(null)}
                 >
-                  <a
+                  <Link
                     to={item.to}
                     className={`flex items-center space-x-1 text-gray-700 hover:text-black p-2 rounded transition-colors duration-200 font-medium group
-                      ${
-                        isScrolled ?
-                         `hover:bg-white/20`:
-                         `hover:bg-slate-50`
-                      }`}
+                      ${isScrolled ? 'hover:bg-white/20' : 'hover:bg-slate-50'}`}
                   >
-                    <item.icon className="w-4 h-4 group-hover:scale-110 transition-transform " />
+                    <item.icon className="w-4 h-4 group-hover:scale-110 transition-transform" />
                     <span>{item.name}</span>
                     {item.dropdown && (
                       <ChevronDown className="w-4 h-4 transition-transform duration-200 group-hover:rotate-180" />
                     )}
-                  </a>
+                  </Link>
 
-                  {/* Dropdown Menu */}
                   {item.dropdown && activeDropdown === item.name && (
                     <div className="absolute top-full left-0 mt-2 w-48 bg-white rounded-xl shadow-xl border border-gray-100 py-2">
                       {item.dropdown.map((dropItem) => (
-                        <a
+                        <Link
                           key={dropItem.name}
                           to={dropItem.to}
                           className="block px-4 py-2 text-gray-700 hover:text-black hover:bg-slate-50 transition-colors duration-200"
                         >
                           {dropItem.name}
-                        </a>
+                        </Link>
                       ))}
                     </div>
                   )}
@@ -208,16 +191,15 @@ if(user && user.role === 'admin') {
 
               {/* Cart */}
               <button className="relative cursor-pointer p-2 text-gray-600 hover:text-black hover:bg-slate-50 rounded-lg transition-all duration-200">
-                <ShoppingBag className="w-5 h-5"  onClick={() => setIsCartOpen(true)} />
-                <span className="absolute -top-1 -right-1  w-4 h-4 bg-black text-white text-xs rounded-full flex items-center justify-center">
-                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-black opacity-75"></span>
-                    <span className="relative">3</span>
+                <ShoppingBag className="w-5 h-5" onClick={() => setIsCartOpen(true)} />
+                <span className="absolute -top-1 -right-1 w-4 h-4 bg-black text-white text-xs rounded-full flex items-center justify-center">
+                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-black opacity-75"></span>
+                  <span className="relative">3</span>
                 </span>
               </button>
-                {user && <span className="font-medium hidden md:block">{user.name }</span>}
+              {user && <span className="font-medium hidden md:block">{user.name}</span>}
 
-
-              {/* User Dropdown - Now shows for both authenticated and unauthenticated users */}
+              {/* User Dropdown */}
               <div className="relative user-dropdown-container">
                 <button 
                   onClick={() => setIsUserDropdownOpen(!isUserDropdownOpen)}
@@ -231,7 +213,6 @@ if(user && user.role === 'admin') {
                   }`} />
                 </button>
 
-                {/* User Dropdown Menu */}
                 {isUserDropdownOpen && (
                   <div className="absolute top-full right-0 mt-2 w-48 bg-white rounded-xl shadow-xl border border-gray-100 py-2 z-50">
                     {userMenuItems.map((item) => (
@@ -245,14 +226,14 @@ if(user && user.role === 'admin') {
                             <span>{item.name}</span>
                           </button>
                         ) : (
-                          <a
+                          <Link
                             to={item.to}
                             className="flex items-center space-x-3 px-4 py-2 text-gray-700 hover:text-black hover:bg-slate-50 transition-colors duration-200"
                             onClick={() => setIsUserDropdownOpen(false)}
                           >
                             <item.icon className="w-4 h-4" />
                             <span>{item.name}</span>
-                          </a>
+                          </Link>
                         )}
                       </div>
                     ))}
@@ -274,7 +255,6 @@ if(user && user.role === 'admin') {
           {isMobileMenuOpen && (
             <div className="md:hidden absolute top-full left-0 right-0 bg-white border-b border-gray-200 shadow-lg">
               <div className="px-4 py-6 space-y-4">
-                {/* Mobile Search */}
                 <div className="flex items-center bg-gray-100 rounded-lg px-4 py-3">
                   <Search className="w-4 h-4 text-gray-400 mr-3" />
                   <input
@@ -284,33 +264,31 @@ if(user && user.role === 'admin') {
                   />
                 </div>
 
-                {/* Mobile Navigation Links */}
                 {navItems.map((item) => (
                   <div key={item.name}>
-                    <a
+                    <Link
                       to={item.to}
                       className="flex items-center space-x-3 text-gray-700 hover:text-slate-400 py-3 transition-colors duration-200"
                     >
                       <item.icon className="w-5 h-5" />
                       <span className="font-medium">{item.name}</span>
-                    </a>
+                    </Link>
                     {item.dropdown && (
                       <div className="ml-8 space-y-2 mt-2">
                         {item.dropdown.map((dropItem) => (
-                          <a
+                          <Link
                             key={dropItem.name}
                             to={dropItem.to}
                             className="block text-gray-600 hover:text-black py-1 transition-colors duration-200"
                           >
                             {dropItem.name}
-                          </a>
+                          </Link>
                         ))}
                       </div>
                     )}
                   </div>
                 ))}
 
-                {/* Mobile User Menu - Now shows for both authenticated and unauthenticated users */}
                 <div className="border-t border-gray-200 pt-4 mt-4">
                   <div className="space-y-2">
                     {userMenuItems.map((item) => (
@@ -324,13 +302,13 @@ if(user && user.role === 'admin') {
                             <span className="font-medium">{item.name}</span>
                           </button>
                         ) : (
-                          <a
+                          <Link
                             to={item.to}
                             className="flex items-center space-x-3 text-gray-700 hover:text-slate-400 py-3 transition-colors duration-200"
                           >
                             <item.icon className="w-5 h-5" />
                             <span className="font-medium">{item.name}</span>
-                          </a>
+                          </Link>
                         )}
                       </div>
                     ))}

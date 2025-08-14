@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from '../../api/axios'; 
+import { useNavigate } from 'react-router-dom';
 
 
 const Login = () => {
@@ -7,6 +8,7 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [user, setUser] = useState(null);
+  const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -28,7 +30,7 @@ const Login = () => {
 
 
       // Optionally redirect to dashboard
-      window.location.href = "/";
+      navigate( "/");
     } catch (err) {
       console.error(err.response?.data || err);
       setError("Invalid credentials or login failed");

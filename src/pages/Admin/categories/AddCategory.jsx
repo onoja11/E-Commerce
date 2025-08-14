@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import axios from "../../../api/axios";
+import { useNavigate } from 'react-router-dom';
 
 const AddCategory = () => {
   const [name, setName] = useState("");
   const [success, setSuccess] = useState("");
   const [error, setError] = useState("");
   const token = localStorage.getItem("token");
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -15,7 +17,7 @@ const AddCategory = () => {
       headers: { Authorization: `Bearer ${token}` }
     });      
     setSuccess("Category added successfully!");
-    window.location.href = '/admin/categories'; 
+      navigate( '/admin/categories'); 
       setError("");
       setName("");
     } catch (err) {

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Package, Tag, DollarSign, FileText, Image, Plus } from 'lucide-react'
 import axios from '../../../api/axios'
+import { useNavigate } from 'react-router-dom'
 
 const CreateProducts = () => {
   const [formData, setFormData] = useState({
@@ -15,6 +16,7 @@ const CreateProducts = () => {
   const [categories, setCategories] = useState([]);
   const [loadingCategories, setLoadingCategories] = useState(true);
   const token = localStorage.getItem('token');
+  const navigate = useNavigate();
   // Fetch categories from API
   useEffect(() => {
     const fetchCategories = async () => {
@@ -62,7 +64,7 @@ const CreateProducts = () => {
        }
       
     });
-    window.location.href = '/admin/products'; 
+    navigate('/admin/products'); 
     console.log('Product created:', response.data);
   } catch (error) {
     console.error('Error creating product:', error);

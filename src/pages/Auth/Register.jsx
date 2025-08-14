@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from '../../api/axios'; 
+import { useNavigate } from 'react-router-dom';
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -13,7 +14,7 @@ const Register = () => {
   const [generalError, setGeneralError] = useState("");
   const [success, setSuccess] = useState("");
   const [user, setUser] = useState(null);
-  
+  const navigate = useNavigate();
   
     
 
@@ -55,7 +56,7 @@ const Register = () => {
       // localStorage.setItem("user", JSON.stringify(res.data.user));
       const token = localStorage.setItem("token", res.data.token);
       setTimeout(() => {
-        window.location.href = "/";
+        navigate("/");
       }, 1000);
 
     } catch (err) {

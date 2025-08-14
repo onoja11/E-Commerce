@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Package, Tag, DollarSign, Edit3, Trash2, Plus } from "lucide-react";
 import Product from "../../../components/general/Product";
 import axios from "../../../api/axios";
+import { Link } from 'react-router-dom'; 
 
 const ViewProducts = () => {
   const [products, setProducts] = useState([]);
@@ -48,9 +49,9 @@ const ViewProducts = () => {
             </div>
           </div>
 
-            <a href="/admin/create/product"  className="flex items-center bg-gradient-to-r from-black to-gray-600 text-white px-4 py-2 rounded-xl shadow hover:scale-[1.02] transition-all">
+            <Link to="/admin/create/product"  className="flex items-center bg-gradient-to-r from-black to-gray-600 text-white px-4 py-2 rounded-xl shadow hover:scale-[1.02] transition-all">
             <Plus className="w-4 h-4 " /> Add Product
-            </a>
+            </Link>
         </div>
 
         {/* Products Grid */}
