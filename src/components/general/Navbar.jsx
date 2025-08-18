@@ -112,8 +112,8 @@ const Navbar = () => {
       await axios.post('/api/logout', {}, {
         headers: { Authorization: `Bearer ${token}` }
       });
-      window.location = "/";
       localStorage.removeItem("token");
+      window.location = "/login";
     } catch (error) {
       console.error("Logout error:", error);
     }

@@ -19,24 +19,32 @@ const CategoriesList = () => {
               Authorization: `Bearer ${localStorage.getItem('token')}`
             }
           });
-          setCategories(res.data); // Make sure API returns array of { id, name }
+          setCategories(res.data); 
         } catch (error) {
           console.error('Error fetching categories:', error.response?.data || error.message);
         } 
       };
       fetchCategories();
     }, []);
-//   useEffect(() => {
-//     const fetchCategories = async () => {
-//       try {
-//         const res = await axios.get("/categories");
-//         setCategories(res.data);
-//       } catch (error) {
-//         console.error("Error fetching categories", error);
-//       }
-//     };
-//     fetchCategories();
-//   }, []);
+
+const handleDelete = async (id) => {
+    if (!window.confirm("Are you sure you want to delete this category?")) return;
+
+  try {
+    await axios.delete(`/api/categories/${id}`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`
+      }
+    });
+
+    // Update state (remove category from list)
+    setCategories(prev => prev.filter(cat => cat.id !== id));
+  } catch (error) {
+    console.error("Error deleting category:", error.response?.data || error.message);
+    alert("Failed to delete category. Please try again.");
+  }
+};
+
   
 
   return (
@@ -74,15 +82,14 @@ const CategoriesList = () => {
       {/* Hover Buttons */}
       <div className="absolute top-3 right-3 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
         {/* Delete */}
-        <form className="inline">
-          <button
-            type="submit"
+        <button
+            onClick={() => handleDelete(cat.id)}
             className="bg-gradient-to-r from-red-400 to-pink-500 hover:from-red-500 hover:to-pink-600 text-white p-2 rounded-lg transition-all duration-200 transform hover:scale-105 shadow-md hover:shadow-lg"
             title="Delete Category"
           >
             <Trash2 className="w-4 h-4" />
           </button>
-        </form>
+
 
         {/* Edit */}
         <a

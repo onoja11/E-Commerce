@@ -35,11 +35,12 @@ const Categories = () => {
             <div className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
               
                 {categories.slice(0, 3).map(category => (
-                    <Category
+                    <Category key={category.id}
                         category={category.name}
-                        pic={pic1}
-                        description={category.id}
-                    />
+                        pic={category.products[0]?.image 
+                        ? `http://kovecaps_api.test/${category.products[0].image}` 
+                        : pic1}                        
+                    />  
                 ))}
             </div>
         </div>

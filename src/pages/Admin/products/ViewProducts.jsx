@@ -2,10 +2,11 @@ import React, { useEffect, useState } from "react";
 import { Package, Tag, DollarSign, Edit3, Trash2, Plus } from "lucide-react";
 import Product from "../../../components/general/Product";
 import axios from "../../../api/axios";
-import { Link } from 'react-router-dom'; 
+import { Link, useNavigate } from 'react-router-dom'; 
 
 const ViewProducts = () => {
   const [products, setProducts] = useState([]);
+  const navigate = useNavigate();
 
   // Simulated fetch (replace with your API call)
    useEffect(() => {
@@ -21,14 +22,26 @@ const ViewProducts = () => {
     }, []);
     console.log(products);
 
-  const handleDelete = (id) => {
-    if (window.confirm("Are you sure you want to delete this product?")) {
-      setProducts(products.filter((product) => product.id !== id));
-    }
+  const handleDelete =async (id) => {
+    if (!window.confirm("Are you sure you want to delete this product?")) return;
+        try {
+          await axios.delete(`/api/products/${id}`, {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`
+            }
+    });
+
+    setProducts(prev => prev.filter(p => p.id !== id));
+  } catch (error) {
+    console.error("Error deleting product:", error.response?.data || error.message);
+    alert("Failed to delete product. Please try again.");
+  }
+    
   };
 
   const handleEdit = (id) => {
-    alert(`Edit product with ID: ${id}`);
+    // alert(`Edit product with ID: ${id}`);
+    navigate(`/admin/product/${id}`)
     // Redirect or open modal for editing
   };
 
@@ -60,8 +73,14 @@ const ViewProducts = () => {
             <Product textColor="text-gray-800"
             border="border border-gray-200 shadow-lg"
               key={product.id}
+              id={product.id}   
+              category={product.category.name}
               name={product.name}
-              description={product.description}
+              preview = {'hidden'}
+              addToCart = {'hidden'}
+              description={product.description.length > 30 
+                          ? product.description.substring(0, 30) + "..." 
+                          : product.description}
               price={`$${product.price.toFixed(2)}`}
               pic={`http://kovecaps_api.test/${product.image}`}
               stock={product.stock}

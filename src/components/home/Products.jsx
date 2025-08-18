@@ -4,6 +4,9 @@ import pic1 from '../../assets/pexels-cottonbro-5119522.jpg'
 import pic2 from '../../assets/pexels-dzeninalukac-1376049.jpg'
 import pic3 from '../../assets/pexels-enginakyurt-1642228.jpg'
 import axios from '../../api/axios'
+import { Link } from 'react-router-dom'
+import { Plus } from 'lucide-react';
+
 
 const Products = () => {
     const [products, setProducts] = useState([]);
@@ -34,8 +37,13 @@ const Products = () => {
                     <Product
                         key={product.id}
                         name={product.name}
-                        description={product.description}
+                        route={product.id}
+                        category={product.category.name}
+                        description= {product.description.length > 30 
+                                        ? product.description.substring(0, 30) + "..." 
+                                        : product.description}
                         price={`$${product.price.toFixed(2)}`}
+                        actionButtons= {'hidden'}
                         pic={`http://kovecaps_api.test/${product.image}`}
                         stock={product.stock}
                         border="border border-gray-200 shadow-lg"
@@ -44,6 +52,16 @@ const Products = () => {
                 
             </div>
             
+           <div className="flex justify-center mt-8">
+  <Link 
+    to="/caps" 
+    className="bg-gradient-to-r from-gray-700 flex gap-2 to-gray-600 animate-bounce text-white px-6 py-3 rounded-lg shadow hover:scale-[1.02] transition-all"
+  >
+    <Plus />
+    View More
+  </Link>
+</div>
+
             </div>
         </div>
       )

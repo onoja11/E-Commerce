@@ -1,19 +1,21 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "../../../api/axios";
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, useParams, Link } from 'react-router-dom';
 
-const AddCategory = () => {
+const EditCategory = () => {
   const [name, setName] = useState("");
   const [success, setSuccess] = useState("");
   const [error, setError] = useState("");
   const token = localStorage.getItem("token");
+  const {id} = useParams();
+  const [categories, setCategories] = useState({})
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       await axios.get('/sanctum/csrf-cookie');      
-      await axios.post('/api/categories', {name}, {
+      await axios.put(`/api/categories/ ${id}`, {name}, {
       headers: { Authorization: `Bearer ${token}` }
     });      
     setSuccess("Category added successfully!");
@@ -25,14 +27,29 @@ const AddCategory = () => {
       setSuccess("");
     }
   };
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    if (token) {
+      axios.get(`/api/categories/ ${id}`, {
+        headers: { Authorization: `Bearer ${token}` }
+      })
+      .then(response => {
+        setCategories(response.data);
+      })
+      .catch(() => {
+        setCategories(null);
+      });
+    }
+  }, [token]);
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-50">
-    
       <div className="bg-white p-6 rounded-lg shadow-md w-full max-w-md">
-        <div className = "flex gap-28 mb-4 align-items">
-        <h2 className="text-2xl font-bold  ">Add Category</h2>
-        <Link to="/admin/categories" className = " bg-black  text-white py-3 px-4   rounded-lg transition-all duration-300 font-semibold shadow-lg hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-black">
+        {/* <h2 className="text-2xl font-bold mb-4 text-center">Edit "{categories.name}" </h2> */}
+         <div className = "flex gap-28 mb-4 align-items">
+        <h2 className="text-xl font-bold  ">Edit "{categories.name}"</h2>
+        <Link to="/admin/categories" className = "w-auto bg-black  text-white py-3 px-4   rounded-lg transition-all duration-300 font-semibold shadow-lg hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-black">
         Categories
         </Link>          
         </div>
@@ -61,4 +78,4 @@ const AddCategory = () => {
   );
 };
 
-export default AddCategory;
+export default EditCategory;
