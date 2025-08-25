@@ -36,6 +36,7 @@ const Categories = () => {
               
                 {categories.slice(0, 3).map(category => (
                     <Category key={category.id}
+                
                         category={category.name}
                         pic={category.products[0]?.image 
                         ? `http://kovecaps_api.test/${category.products[0].image}` 

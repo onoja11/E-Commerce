@@ -10,6 +10,7 @@ const Login = () => {
   const [user, setUser] = useState(null);
   const navigate = useNavigate();
 
+  
   const handleLogin = async (e) => {
     e.preventDefault();
     setError("");
@@ -32,8 +33,8 @@ const Login = () => {
       // Optionally redirect to dashboard
       navigate( "/");
     } catch (err) {
-      console.error(err.response?.data || err);
-      setError("Invalid credentials or login failed");
+      // console.error(err.response?.data );
+      setError(err.response?.data?.message);
     }
   };
   return (
@@ -41,7 +42,7 @@ const Login = () => {
       <div className='bg-white p-8 my-28 rounded-lg shadow-lg w-full max-w-md'>
         <h2 className='text-2xl font-bold mb-6 text-center'>Login</h2>
         <form onSubmit={handleLogin}>
-          {error && <p className="text-red-500 text-center mb-4">{error}</p>}
+              {error && <p className="text-red-500 text-center mb-4">{error}</p>}
 
           <div className='mb-4'>
             <label className='block text-sm font-medium mb-2' htmlFor='email'>Email</label>
@@ -50,7 +51,7 @@ const Login = () => {
               id='email'
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className='w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black'
+              className='w-full error px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black'
               required
             />
           </div>

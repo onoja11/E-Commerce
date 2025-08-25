@@ -15,6 +15,8 @@ import CategoryList from "./pages/Admin/categories/CategoryList";
 import AddCategory from "./pages/Admin/categories/AddCategory";
 import EditCategory from "./pages/Admin/categories/EditCategory";
 import AdminRoute from "./pages/Auth/AdminRoute";
+import SearchResults from "./pages/SearchResults";
+import ProfilePage from "./pages/Auth/ProfilePage";
 
 
 const App = () => {
@@ -26,7 +28,7 @@ const App = () => {
     <Navbar/>
       <Routes>
         <Route path="/" element={ <Home/>} />
-        {/* <Route path="*" element={<Home />} /> */}
+        <Route path="*" element={<Home />} />
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact/>} />
         <Route path="/caps" element={<Caps/>} />
@@ -39,6 +41,8 @@ const App = () => {
         <Route path="/admin/categories" element={<AdminRoute><CategoryList/></AdminRoute>} />
         <Route path="/admin/categories/add"  element={<AdminRoute><AddCategory/></AdminRoute>} />
         <Route path="/admin/categories/edit/:id"  element={<AdminRoute><EditCategory/></AdminRoute>} />
+        <Route path="/search" element={<SearchResults />} />
+        <Route path="/profile" element={<ProfilePage />}/>
       </Routes>
     <Footer/>
     </Router>

@@ -77,7 +77,7 @@ const ViewProducts = () => {
               category={product.category.name}
               name={product.name}
               preview = {'hidden'}
-              addToCart = {'hidden'}
+              addToCartBtn = {'hidden'}
               description={product.description.length > 30 
                           ? product.description.substring(0, 30) + "..." 
                           : product.description}

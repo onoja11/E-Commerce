@@ -37,12 +37,13 @@ const Products = () => {
                     <Product
                         key={product.id}
                         name={product.name}
+                        id={product.id}
                         route={product.id}
                         category={product.category.name}
                         description= {product.description.length > 30 
                                         ? product.description.substring(0, 30) + "..." 
                                         : product.description}
-                        price={`$${product.price.toFixed(2)}`}
+                        price={`${product.price.toFixed(2)}`}
                         actionButtons= {'hidden'}
                         pic={`http://kovecaps_api.test/${product.image}`}
                         stock={product.stock}

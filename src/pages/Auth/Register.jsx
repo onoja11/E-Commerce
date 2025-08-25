@@ -10,7 +10,7 @@ const Register = () => {
     confirm_password: "",
   });
   
-  const [errors, setErrors] = useState({});
+    const [errors, setErrors] = useState({});
   const [generalError, setGeneralError] = useState("");
   const [success, setSuccess] = useState("");
   const [user, setUser] = useState(null);

@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { PiBaseballCap } from "react-icons/pi";
 import { Link, useNavigate } from 'react-router-dom'; 
 import axios from '../../api/axios'; 
-
 import { 
   Menu, 
   X, 
@@ -14,7 +13,6 @@ import {
   Package,
   Info,
   Phone,
-  Settings,
   LogOut,
   UserCircle,
   LogIn,
@@ -22,6 +20,7 @@ import {
   ChartBarStacked,
 } from 'lucide-react';
 import AddToCart from './AddToCart';
+import { useCart } from '../../context/CartContext';
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -30,18 +29,7 @@ const Navbar = () => {
   const [isCartOpen, setIsCartOpen] = useState(false);
   const navigate = useNavigate();
   const [isUserDropdownOpen, setIsUserDropdownOpen] = useState(false);
-  const [cartItems, setCartItems] = useState([
-    {
-      name: 'Black Snapback Cap',
-      price: 39.99, 
-      image: '../../../pexels-cottonbro-5119522.jpg',
-    },
-    {
-      name: 'Blue Denim Cap',
-      price: 29.99,
-      image: '../../../pexels-dzeninalukac-1376049.jpg',
-    },
-  ]);
+  const { cart } = useCart();   // 🔥 use context cart here
 
   useEffect(() => {
     const handleScroll = () => {
@@ -63,6 +51,8 @@ const Navbar = () => {
 
   const token = localStorage.getItem("token");
   const [user, setUser] = useState(null);
+  const [searchQuery, setSearchQuery] = useState("");
+
 
   useEffect(() => {
     if (token) {
@@ -88,7 +78,6 @@ const Navbar = () => {
 
   const authenticatedUserMenuItems = [
     { name: 'Profile', to: '/profile', icon: UserCircle },
-    { name: 'Settings', to: '/settings', icon: Settings },
     { name: 'Logout', to: '/logout', icon: LogOut, action: 'logout' },
   ];
 
@@ -142,60 +131,54 @@ const Navbar = () => {
             {/* Desktop Navigation */}
             <div className="hidden md:flex items-center space-x-8">
               {navItems.map((item) => (
-                <div
+                <Link
                   key={item.name}
-                  className="relative"
-                  onMouseEnter={() => item.dropdown && setActiveDropdown(item.name)}
-                  onMouseLeave={() => setActiveDropdown(null)}
+                  to={item.to}
+                  className={`flex items-center space-x-1 text-gray-700 hover:text-black p-2 rounded transition-colors duration-200 font-medium group
+                    ${isScrolled ? 'hover:bg-white/20' : 'hover:bg-slate-50'}`}
                 >
-                  <Link
-                    to={item.to}
-                    className={`flex items-center space-x-1 text-gray-700 hover:text-black p-2 rounded transition-colors duration-200 font-medium group
-                      ${isScrolled ? 'hover:bg-white/20' : 'hover:bg-slate-50'}`}
-                  >
-                    <item.icon className="w-4 h-4 group-hover:scale-110 transition-transform" />
-                    <span>{item.name}</span>
-                    {item.dropdown && (
-                      <ChevronDown className="w-4 h-4 transition-transform duration-200 group-hover:rotate-180" />
-                    )}
-                  </Link>
-
-                  {item.dropdown && activeDropdown === item.name && (
-                    <div className="absolute top-full left-0 mt-2 w-48 bg-white rounded-xl shadow-xl border border-gray-100 py-2">
-                      {item.dropdown.map((dropItem) => (
-                        <Link
-                          key={dropItem.name}
-                          to={dropItem.to}
-                          className="block px-4 py-2 text-gray-700 hover:text-black hover:bg-slate-50 transition-colors duration-200"
-                        >
-                          {dropItem.name}
-                        </Link>
-                      ))}
-                    </div>
-                  )}
-                </div>
+                  <item.icon className="w-4 h-4 group-hover:scale-110 transition-transform" />
+                  <span>{item.name}</span>
+                </Link>
               ))}
             </div>
 
             {/* Right Side Actions */}
             <div className="flex items-center space-x-4">
               {/* Search */}
-              <div className="hidden lg:flex items-center bg-gray-100 rounded-full px-4 py-2 focus-within:ring-2 focus-within:ring-black transition-all">
-                <Search className="w-4 h-4 text-gray-400 mr-2" />
-                <input
-                  type="text"
-                  placeholder="Search..."
-                  className="bg-transparent outline-none text-sm placeholder-gray-400 w-32 focus:w-48 transition-all duration-300"
-                />
-              </div>
+            <div className="hidden lg:flex items-center bg-gray-100 rounded-full px-4 py-2 focus-within:ring-2 focus-within:ring-black transition-all">
+  <Search className="w-4 h-4 text-gray-400 mr-2" />
+  <form
+    onSubmit={(e) => {
+      e.preventDefault();
+      if (searchQuery.trim()) {
+        navigate(`/search?query=${searchQuery}`);
+      }
+    }}
+  >
+    <input
+      type="text"
+      placeholder="Search..."
+      value={searchQuery}
+      onChange={(e) => setSearchQuery(e.target.value)}
+      className="bg-transparent outline-none text-sm placeholder-gray-400 w-32 focus:w-48 transition-all duration-300"
+    />
+  </form>
+</div>
+
 
               {/* Cart */}
-              <button className="relative cursor-pointer p-2 text-gray-600 hover:text-black hover:bg-slate-50 rounded-lg transition-all duration-200">
-                <ShoppingBag className="w-5 h-5" onClick={() => setIsCartOpen(true)} />
-                <span className="absolute -top-1 -right-1 w-4 h-4 bg-black text-white text-xs rounded-full flex items-center justify-center">
-                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-black opacity-75"></span>
-                  <span className="relative">3</span>
-                </span>
+              <button 
+                onClick={() => setIsCartOpen(true)}
+                className="relative cursor-pointer p-2 text-gray-600 hover:text-black hover:bg-slate-50 rounded-lg transition-all duration-200"
+              >
+                <ShoppingBag className="w-5 h-5" />
+                {cart.length > 0 && (
+                  <span className="absolute -top-1 -right-1 w-4 h-4 bg-black text-white text-xs rounded-full flex items-center justify-center">
+                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-black opacity-75"></span>
+                    <span className="relative">{cart.length}</span>
+                  </span>
+                )}
               </button>
               {user && <span className="font-medium hidden md:block">{user.name}</span>}
 
@@ -250,79 +233,11 @@ const Navbar = () => {
               </button>
             </div>
           </div>
-
-          {/* Mobile Menu */}
-          {isMobileMenuOpen && (
-            <div className="md:hidden absolute top-full left-0 right-0 bg-white border-b border-gray-200 shadow-lg">
-              <div className="px-4 py-6 space-y-4">
-                <div className="flex items-center bg-gray-100 rounded-lg px-4 py-3">
-                  <Search className="w-4 h-4 text-gray-400 mr-3" />
-                  <input
-                    type="text"
-                    placeholder="Search..."
-                    className="bg-transparent outline-none text-sm placeholder-gray-400 flex-1"
-                  />
-                </div>
-
-                {navItems.map((item) => (
-                  <div key={item.name}>
-                    <Link
-                      to={item.to}
-                      className="flex items-center space-x-3 text-gray-700 hover:text-slate-400 py-3 transition-colors duration-200"
-                    >
-                      <item.icon className="w-5 h-5" />
-                      <span className="font-medium">{item.name}</span>
-                    </Link>
-                    {item.dropdown && (
-                      <div className="ml-8 space-y-2 mt-2">
-                        {item.dropdown.map((dropItem) => (
-                          <Link
-                            key={dropItem.name}
-                            to={dropItem.to}
-                            className="block text-gray-600 hover:text-black py-1 transition-colors duration-200"
-                          >
-                            {dropItem.name}
-                          </Link>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                ))}
-
-                <div className="border-t border-gray-200 pt-4 mt-4">
-                  <div className="space-y-2">
-                    {userMenuItems.map((item) => (
-                      <div key={item.name}>
-                        {item.action === 'logout' ? (
-                          <button
-                            onClick={handleLogout}
-                            className="w-full flex items-center space-x-3 text-left text-gray-700 hover:text-red-600 py-3 transition-colors duration-200"
-                          >
-                            <item.icon className="w-5 h-5" />
-                            <span className="font-medium">{item.name}</span>
-                          </button>
-                        ) : (
-                          <Link
-                            to={item.to}
-                            className="flex items-center space-x-3 text-gray-700 hover:text-slate-400 py-3 transition-colors duration-200"
-                          >
-                            <item.icon className="w-5 h-5" />
-                            <span className="font-medium">{item.name}</span>
-                          </Link>
-                        )}
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
         </div>
       </nav>
       <AddToCart
         isOpen={isCartOpen}
         onClose={() => setIsCartOpen(false)}
-        cartItems={cartItems} 
       />
     </div>
   );

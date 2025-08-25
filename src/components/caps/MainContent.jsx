@@ -47,13 +47,14 @@ const MainContent = () => {
               border="border border-gray-200 shadow-lg"
               key={product.id}
               name={product.name}
+              id={product.id}
               route={product.id}
               actionButtons= {'hidden'}
               category={product.category.name}
               description={product.description.length > 30 
                 ? product.description.substring(0, 30) + "..." 
                 : product.description}
-              price={`$${product.price.toFixed(2)}`}
+              price={`${product.price.toFixed(2)}`}
               pic={`http://kovecaps_api.test/${product.image}`}
               stock={product.stock}
             />

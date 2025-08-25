@@ -1,11 +1,15 @@
 import React, { useState, useEffect } from 'react'
 import { useParams } from "react-router-dom"
 import axios from '../api/axios'
+import { useCart } from '../context/CartContext';
 
 const Preview = () => {
   const { id } = useParams();
   const [product, setProduct] = useState({});
   const [quantity, setQuantity] = useState(1);
+  const imageBaseUrl = 'http://kovecaps_api.test/';
+
+  const { addToCart } = useCart();
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -44,12 +48,12 @@ const Preview = () => {
             <div className="relative bg-gradient-to-br from-gray-900 to-gray-800 rounded-3xl p-3 card-hover">
               <div className="aspect-square relative overflow-hidden rounded-2xl">
                 <img 
-                  src={`http://kovecaps_api.test/${product.image}`}
+                  src={imageBaseUrl + product.image}
                   alt={product.name} 
                   className="w-full h-full object-cover" 
                 />
                 <div className="absolute animate-bounce transition-all duration-200 top-4 right-4 bg-gradient-to-r from-green-500 to-emerald-600 text-white px-3 py-1 rounded-full text-sm font-bold pulse-ring">
-                  NEW
+                  {product.category?.name}
                 </div>
               </div>
             </div>
@@ -105,7 +109,9 @@ const Preview = () => {
               </div>
 
               <div className="space-y-4">
-                <button className="w-full bg-gradient-to-r from-gray-700 via-gray-500 to-slate-800 hover:from-gray-700 hover:via-gray-600 hover:to-slate-500 text-white font-bold py-4 px-8 rounded-2xl text-lg transform hover:scale-105 transition-all duration-300 shadow-2xl neon-glow">
+                <button className="w-full bg-gradient-to-r from-gray-700 via-gray-500 to-slate-800 hover:from-gray-700 hover:via-gray-600 hover:to-slate-500 text-white font-bold py-4 px-8 rounded-2xl text-lg transform hover:scale-105 transition-all duration-300 shadow-2xl neon-glow"
+                onClick={() => addToCart({ id:product.id, name: product.name, price:product.price, image: imageBaseUrl + product.image , quantity, stock: product.stock })} 
+                  >
                   Add to Cart • ${(Number(product.price) * quantity).toLocaleString()}
                 </button>
               </div>
