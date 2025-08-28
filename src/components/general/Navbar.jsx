@@ -18,6 +18,7 @@ import {
   LogIn,
   UserPlus,
   ChartBarStacked,
+  ReceiptText,
 } from 'lucide-react';
 import AddToCart from './AddToCart';
 import { useCart } from '../../context/CartContext';
@@ -83,6 +84,7 @@ const Navbar = () => {
 
   const authenticatedAdminMenuItems = [
     { name: 'Products', to: '/admin/products', icon: Package },
+    { name: 'Orders', to: '/admin/orders', icon: ReceiptText },
     { name: 'Categories', to: '/admin/categories', icon: ChartBarStacked },
   ];
 

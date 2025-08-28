@@ -1,39 +1,65 @@
 import React, { useState, useEffect } from 'react';
 import axios from '../../api/axios';
-import { User, Package, Heart, CreditCard, TrendingUp, MapPin, Mail, Calendar } from 'lucide-react';
+import {Link} from 'react-router-dom';
+import { Package, TrendingUp, MapPin, Mail, Calendar } from 'lucide-react';
 
 const ProfilePage = () => {
   const [user, setUser] = useState(null);
+  const [orders, setOrders] = useState([]);
+  const [loading, setLoading] = useState(true);
   const token = localStorage.getItem("token");
 
   useEffect(() => {
-    if (token) {
-      axios.get('/api/user', {
-        headers: { Authorization: `Bearer ${token}` }
-      })
-      .then(response => {
-        setUser(response.data);
-      })
-      .catch(() => {
+    const fetchData = async () => {
+      try {
+        if (token) {
+          // Fetch user info
+          const userRes = await axios.get('/api/user', {
+            headers: { Authorization: `Bearer ${token}` }
+          });
+          setUser(userRes.data);
+
+          // Fetch orders
+          const ordersRes = await axios.get('/api/orders', {
+            headers: { Authorization: `Bearer ${token}` }
+          });
+          setOrders(ordersRes.data);
+        }
+      } catch (err) {
+        console.error("Auth error:", err);
         localStorage.removeItem("token");
         setUser(null);
-      });
-    }
+        setOrders([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
   }, [token]);
 
+  // Calculate total spent
+  const totalSpent = orders.reduce((acc, order) => acc + parseFloat(order.total_amount || 0), 0);
+
   const stats = [
-    { number: '24', label: 'Total Orders', icon: Package },
-    { number: '$2,480', label: 'Total Spent', icon: TrendingUp },
+    { number: orders.length, label: 'Total Orders', icon: Package },
+    { number: `$${totalSpent.toFixed(2)}`, label: 'Total Spent', icon: TrendingUp },
   ];
 
-  const handleAction = (action) => {
-    alert(`${action} functionality would open here`);
-  };
+  
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-100">
+        <p className="text-lg text-gray-600">Loading profile...</p>
+      </div>
+    );
+  }
 
   if (!user) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-100">
-        <p className="text-lg text-gray-600">Loading profile...</p>
+        <p className="text-lg text-gray-600">Please log in to view your profile.</p>
       </div>
     );
   }
@@ -44,7 +70,6 @@ const ProfilePage = () => {
         
         {/* Profile Header */}
         <div className="bg-gradient-to-r from-white to-white/5 backdrop-blur-lg border border-white/20 rounded-3xl p-8 mb-8 relative overflow-hidden group">
-          {/* Animated border effect */}
           <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 animate-pulse"></div>
 
           <div className="flex flex-col md:flex-row items-center md:items-start gap-8 relative z-10">
@@ -55,35 +80,38 @@ const ProfilePage = () => {
               </div>
             </div>
 
-            {/* User Info + Buttons */}
+            {/* User Info + Actions */}
             <div className="flex-1 w-full">
-              {/* Name + Actions row */}
               <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-4">
                 <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text">
                   {user.name || "Unnamed User"}
                 </h1>
                 <div className="flex gap-3">
                   {['Edit Profile', 'View All Orders'].map((action, index) => (
-                    <button
+                    <Link
+                      to={action === 'Edit Profile' ? '/profile/edit' : '/orders'}
                       key={index}
-                      onClick={() => handleAction(action)}
+                      // onClick={() => handleAction(action)}
                       className="bg-black text-white font-semibold py-2 px-4 rounded transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-white/20 active:scale-95"
                     >
                       {action}
-                    </button>
+                    </Link>
                   ))}
                 </div>
               </div>
 
               {/* Contact Info */}
-              <div className="space-y-2 /70">
+              <div className="space-y-2">
                 <div className="flex items-center gap-2">
                   <Mail className="w-4 h-4" />
                   <span>{user.email}</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <Calendar className="w-4 h-4" />
-                  <span>Premium Member since {user.created_at ? new Date(user.created_at).getFullYear() : "—"}</span>
+                  <span>
+                    Member since{" "}
+                    {user.created_at ? new Date(user.created_at).getFullYear() : "—"}
+                  </span>
                 </div>
                 <div className="flex items-center gap-2">
                   <MapPin className="w-4 h-4" />
@@ -104,15 +132,14 @@ const ProfilePage = () => {
                 className="bg-white backdrop-blur-sm border border-white/10 rounded-2xl p-6 text-center transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-white/10 cursor-pointer group relative overflow-hidden"
               >
                 <div className="relative z-10">
-                  <IconComponent className="w-8 h-8 mx-auto mb-3 /60" />
+                  <IconComponent className="w-8 h-8 mx-auto mb-3" />
                   <div className="text-3xl font-bold mb-2">{stat.number}</div>
-                  <div className="text-sm /60 uppercase tracking-wider">{stat.label}</div>
+                  <div className="text-sm uppercase tracking-wider">{stat.label}</div>
                 </div>
               </div>
             );
           })}
         </div>
-
       </div>
     </div>
   );

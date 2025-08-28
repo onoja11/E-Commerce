@@ -1,9 +1,59 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { X, Trash2 } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { useCart } from '../../context/CartContext';
+import axios from '../../api/axios'; // your axios instance
 
 const AddToCart = ({ isOpen, onClose }) => {
-  const { cart, removeFromCart } = useCart();
+  const { cart, removeFromCart, clearCart } = useCart();
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState("");
+
+  const navigate = useNavigate();
+
+  // Checkout handler
+  const handleCheckout = async () => {
+    if (cart.length === 0) {
+      setMessage("Your cart is empty.");
+      return;
+    }
+
+    setLoading(true);
+    setMessage("");
+
+    try {
+      const token = localStorage.getItem("token"); // if using Sanctum/JWT
+
+      const response = await axios.post(
+        "api/orders",
+        {
+          cart: cart.map((item) => ({
+            product_id: item.id,
+            quantity: item.quantity,
+          })),
+        },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+
+      console.log("Order placed:", response.data);
+
+      setMessage("Order placed successfully!");
+      clearCart(); // empty the cart after checkout
+      onClose();   // close the cart drawer
+    } catch (error) {
+      console.error(error.response?.data || error.message);
+      setMessage(error.response?.data?.message || "Checkout failed.");
+    } finally {
+      setLoading(false);
+    }
+  };
+  if(message === "Unauthenticated."){
+    setMessage("Please login to proceed.");
+    navigate("/login");
+  }
+
 
   return (
     <div
@@ -11,6 +61,7 @@ const AddToCart = ({ isOpen, onClose }) => {
         isOpen ? 'translate-x-0' : 'translate-x-full'
       }`}
     >
+      {/* Header */}
       <div className="flex justify-between items-center px-6 py-4">
         <h2 className="text-xl font-extrabold">Your Cart</h2>
         <button onClick={onClose} className="text-gray-500 hover:text-black">
@@ -18,6 +69,7 @@ const AddToCart = ({ isOpen, onClose }) => {
         </button>
       </div>
 
+      {/* Cart Items */}
       <div className="overflow-y-auto px-6 py-4 space-y-6 h-[calc(100%-160px)]">
         {cart.length === 0 ? (
           <p className="text-center text-gray-500">Your cart is empty.</p>
@@ -45,6 +97,7 @@ const AddToCart = ({ isOpen, onClose }) => {
         )}
       </div>
 
+      {/* Subtotal + Checkout Button */}
       <div className="absolute bottom-0 left-0 right-0 px-6 py-4">
         <div className="flex justify-between mb-3">
           <span className="text-gray-700 font-medium">Subtotal</span>
@@ -52,9 +105,16 @@ const AddToCart = ({ isOpen, onClose }) => {
             ${cart.reduce((acc, item) => acc + item.price * item.quantity, 0).toFixed(2)}
           </span>
         </div>
-        <button className="w-full bg-black text-white py-3 rounded-lg font-medium hover:bg-gray-900 transition-all">
-          Proceed to Checkout
+        <button
+          onClick={handleCheckout}
+          disabled={loading}
+          className={`w-full bg-black text-white py-3 rounded-lg font-medium transition-all ${
+            loading ? "opacity-70 cursor-not-allowed" : "hover:bg-gray-900"
+          }`}
+        >
+          {loading ? "Processing..." : "Proceed to Checkout"}
         </button>
+        {message && <p className="mt-3 text-center text-sm text-gray-600">{message}</p>}
       </div>
     </div>
   );

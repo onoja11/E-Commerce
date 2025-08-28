@@ -17,6 +17,10 @@ import EditCategory from "./pages/Admin/categories/EditCategory";
 import AdminRoute from "./pages/Auth/AdminRoute";
 import SearchResults from "./pages/SearchResults";
 import ProfilePage from "./pages/Auth/ProfilePage";
+import ProtectedRoute from "./pages/Auth/ProtectedRoute";
+import OrdersPage from "./pages/Auth/OrderPage";
+import ViewOrders from "./pages/Admin/orders/ViewOrders";
+import OrderDetails from "./pages/Admin/orders/OrderDetails";
 
 
 const App = () => {
@@ -41,8 +45,11 @@ const App = () => {
         <Route path="/admin/categories" element={<AdminRoute><CategoryList/></AdminRoute>} />
         <Route path="/admin/categories/add"  element={<AdminRoute><AddCategory/></AdminRoute>} />
         <Route path="/admin/categories/edit/:id"  element={<AdminRoute><EditCategory/></AdminRoute>} />
+        <Route path="/admin/orders"  element={<AdminRoute><ViewOrders/></AdminRoute>} />
         <Route path="/search" element={<SearchResults />} />
-        <Route path="/profile" element={<ProfilePage />}/>
+        <Route path="/profile" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>}/>
+        <Route path="/orders" element={<ProtectedRoute><OrdersPage /></ProtectedRoute>}/>
+        <Route path="/admin/orders/view/:id" element={<ProtectedRoute><OrderDetails/></ProtectedRoute>}/>
       </Routes>
     <Footer/>
     </Router>
