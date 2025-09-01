@@ -43,7 +43,7 @@ const ProfilePage = () => {
 
   const stats = [
     { number: orders.length, label: 'Total Orders', icon: Package },
-    { number: `$${totalSpent.toFixed(2)}`, label: 'Total Spent', icon: TrendingUp },
+    { number: `$${Number(totalSpent).toLocaleString()}`, label: 'Total Spent', icon: TrendingUp },
   ];
 
   
@@ -89,7 +89,7 @@ const ProfilePage = () => {
                 <div className="flex gap-3">
                   {['Edit Profile', 'View All Orders'].map((action, index) => (
                     <Link
-                      to={action === 'Edit Profile' ? '/profile/edit' : '/orders'}
+                      to={action === 'Edit Profile' ? `/profile/edit/${user.id}` : '/orders'}
                       key={index}
                       // onClick={() => handleAction(action)}
                       className="bg-black text-white font-semibold py-2 px-4 rounded transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-white/20 active:scale-95"
@@ -113,10 +113,7 @@ const ProfilePage = () => {
                     {user.created_at ? new Date(user.created_at).getFullYear() : "—"}
                   </span>
                 </div>
-                <div className="flex items-center gap-2">
-                  <MapPin className="w-4 h-4" />
-                  <span>{user.location || "No location set"}</span>
-                </div>
+                
               </div>
             </div>
           </div>

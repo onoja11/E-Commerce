@@ -19,6 +19,7 @@ import {
   UserPlus,
   ChartBarStacked,
   ReceiptText,
+  Wallet,
 } from 'lucide-react';
 import AddToCart from './AddToCart';
 import { useCart } from '../../context/CartContext';
@@ -79,6 +80,7 @@ const Navbar = () => {
 
   const authenticatedUserMenuItems = [
     { name: 'Profile', to: '/profile', icon: UserCircle },
+    { name: 'Wallet', to: '/wallet', icon: Wallet },
     { name: 'Logout', to: '/logout', icon: LogOut, action: 'logout' },
   ];
 

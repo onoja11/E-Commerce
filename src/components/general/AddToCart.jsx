@@ -37,9 +37,10 @@ const AddToCart = ({ isOpen, onClose }) => {
         }
       );
 
-      console.log("Order placed:", response.data);
+      // console.log("Order placed:", response.data.message);
 
-      setMessage("Order placed successfully!");
+      setMessage(response.data.message);
+      window.dispatchEvent(new Event("reviewStatusUpdated"));
       clearCart(); // empty the cart after checkout
       onClose();   // close the cart drawer
     } catch (error) {
@@ -83,7 +84,7 @@ const AddToCart = ({ isOpen, onClose }) => {
               />
               <div className="flex-1">
                 <h3 className="font-medium text-sm">{item.name}</h3>
-                <p className="text-gray-500 text-sm">${item.price}</p>
+                <p className="text-gray-500 text-sm">${Number(item.price).toLocaleString()}</p>
                 <p className="text-gray-400 text-xs">Qty: {item.quantity}</p>
               </div>
               <button
@@ -102,7 +103,8 @@ const AddToCart = ({ isOpen, onClose }) => {
         <div className="flex justify-between mb-3">
           <span className="text-gray-700 font-medium">Subtotal</span>
           <span className="font-semibold">
-            ${cart.reduce((acc, item) => acc + item.price * item.quantity, 0).toFixed(2)}
+            ${}
+            {Number(cart.reduce((acc, item) => acc + item.price * item.quantity, 0).toFixed(2)).toLocaleString()}
           </span>
         </div>
         <button

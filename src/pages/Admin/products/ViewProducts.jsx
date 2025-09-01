@@ -81,7 +81,7 @@ const ViewProducts = () => {
               description={product.description.length > 30 
                           ? product.description.substring(0, 30) + "..." 
                           : product.description}
-              price={`$${product.price.toFixed(2)}`}
+              price={product.price}
               pic={`http://kovecaps_api.test/${product.image}`}
               stock={product.stock}
               onDelete={handleDelete}

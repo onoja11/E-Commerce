@@ -102,13 +102,13 @@ const OrderDetails = () => {
       ? product.description.substring(0, 30) + "..."
       : product.description
   }
-  price={`${Number(product.price).toFixed(2)}`}
+  price={product.price}
   pic={
     product.image?.startsWith("http")
       ? product.image
       : `http://kovecaps_api.test/${product.image}`
   }
-  stock={product.quantity}
+  quantity={product.quantity}
   onDelete={handleDelete}
   onEdit={handleEdit}
 />

@@ -21,6 +21,10 @@ import ProtectedRoute from "./pages/Auth/ProtectedRoute";
 import OrdersPage from "./pages/Auth/OrderPage";
 import ViewOrders from "./pages/Admin/orders/ViewOrders";
 import OrderDetails from "./pages/Admin/orders/OrderDetails";
+import EditOrder from "./pages/Admin/orders/EditOrder";
+import EditProfile from "./pages/Auth/EditProfile";
+import ReviewModal from "./pages/Auth/ReviewModal";
+import Wallet from "./pages/Auth/Wallet";
 
 
 const App = () => {
@@ -30,6 +34,7 @@ const App = () => {
     <>
     <Router>
     <Navbar/>
+    <ReviewModal/>
       <Routes>
         <Route path="/" element={ <Home/>} />
         <Route path="*" element={<Home />} />
@@ -48,8 +53,12 @@ const App = () => {
         <Route path="/admin/orders"  element={<AdminRoute><ViewOrders/></AdminRoute>} />
         <Route path="/search" element={<SearchResults />} />
         <Route path="/profile" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>}/>
+        <Route path="/profile/edit/:id" element={<ProtectedRoute>< EditProfile /></ProtectedRoute>}/>
+        <Route path="/wallet" element={<ProtectedRoute>< Wallet /></ProtectedRoute>}/>
         <Route path="/orders" element={<ProtectedRoute><OrdersPage /></ProtectedRoute>}/>
-        <Route path="/admin/orders/view/:id" element={<ProtectedRoute><OrderDetails/></ProtectedRoute>}/>
+        <Route path="/admin/orders/view/:id" element={<AdminRoute><OrderDetails/></AdminRoute>}/>
+        <Route path="/admin/orders/edit/:id" element={<AdminRoute><EditOrder/></AdminRoute>}/>
+
       </Routes>
     <Footer/>
     </Router>

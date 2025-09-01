@@ -64,7 +64,7 @@ const handleCancelOrder = async (orderId) => {
   const getStatusColor = (status) => {
     switch (status) {
       case "delivered":
-        return "bg-black text-white";
+        return "bg-green-600 text-white";
       case "cancelled":
         return "bg-red-800 text-white";
       case "pending":

@@ -118,12 +118,12 @@ const ViewOrders = () => {
                     <Link  to={`/admin/orders/view/${order.id}`} className="p-1 text-blue-600 hover:text-blue-800 hover:bg-blue-50 rounded transition-colors" title="View">
                       <Eye className="h-4 w-4" />
                     </Link>
-                    <button className="p-1 text-gray-600 hover:text-gray-800 hover:bg-gray-50 rounded transition-colors" title="Edit">
+                    <Link to={`/admin/orders/edit/${order.  id}`} className="p-1 text-gray-600 hover:text-gray-800 hover:bg-gray-50 rounded transition-colors" title="Edit">
                       <Edit className="h-4 w-4" />
-                    </button>
-                    <button className="p-1 text-red-600 hover:text-red-800 hover:bg-red-50 rounded transition-colors" title="Delete">
+                    </Link >
+                    {/* <button className="p-1 text-red-600 hover:text-red-800 hover:bg-red-50 rounded transition-colors" title="Delete">
                       <Trash2 className="h-4 w-4" />
-                    </button>
+                    </button> */}
                   </div>
                 </td>
               </tr>
@@ -135,7 +135,7 @@ const ViewOrders = () => {
         <div className="bg-white px-6 py-4 border-t border-gray-200">
           <div className="flex justify-between items-center text-sm text-gray-600">
             <span>Total orders: {orders.length}</span>
-            <span>In Stock: {orders.filter(p => p.status === 'In Stock').length}</span>
+            {/* <span>In Stock: {orders.filter(p => p.status === 'In Stock').length}</span> */}
           </div>
         </div>
       </div>

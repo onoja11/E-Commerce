@@ -133,7 +133,7 @@ const ContactForm = () => {
             value={formData.message}
             onChange={handleChange}
             className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-900 focus:border-transparent transition-all resize-none" 
-            placeholder="Tell us about your project or how we can help you..."
+            placeholder=" Have a problem? Tell us about it..."
             required
           />
             {errors && <p className="text-red-600 mb-4">{errors.message }</p>}
