@@ -51,7 +51,7 @@ const ReviewModal = () => {
         { status: action }, 
         { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
       );
-    //   setShow(false);
+      setShow(false);
     } catch (err) {
       console.error("Failed to update review status:", err);
     }

@@ -24,7 +24,7 @@ export const CartProvider = ({ children }) => {
                 ...item,
                 quantity: Math.min(
                   item.quantity + product.quantity,
-                  product.stock // 🚀 don't exceed available stock
+                  product.stock // don't exceed available stock
                 ),
               }
             : item
