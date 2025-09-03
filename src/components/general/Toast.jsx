@@ -10,8 +10,8 @@ const Toast = ({ message, type = "success", onClose }) => {
 
   return (
     <div
-      className={`fixed top-5 right-5 px-4 py-3 rounded-lg shadow-lg text-white font-medium z-900
-        ${type === "success" ? "bg-green-600" : "bg-red-600"}`}
+      className={`fixed top-5 right-5 px-6 py-4 rounded shadow-lg text-white font-medium z-900
+        ${type === "success" ? "bg-green-600/90" : "bg-red-600/90"}`}
     >
       {message}
     </div>
