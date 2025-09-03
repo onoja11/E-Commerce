@@ -10,11 +10,13 @@ import { Plus } from 'lucide-react';
 
 const Products = () => {
     const [products, setProducts] = useState([]);
+    const [loading, setLoading] = useState(true);
     useEffect(() => {
         const fetchProducts = async () => {
             try {
                 const res = await axios.get('/api/products');
-                setProducts(res.data); // Make sure API returns array of { id, name }
+                setProducts(res.data);
+                setLoading(false);
             } catch (error) {
                 console.error('Error fetching products:', error.response?.data || error.message);
             }
@@ -33,7 +35,10 @@ const Products = () => {
                 </p>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mt-10">
-                {products.slice(0,4).map(product => (
+                {loading ? (
+                    <p>Loading products...</p>
+                ) : (
+                products.slice(0,4).map(product => (
                     <Product
                         key={product.id}
                         name={product.name}
@@ -45,11 +50,13 @@ const Products = () => {
                                         : product.description}
                         price={`${product.price}`}
                         actionButtons= {'hidden'}
-                        pic={`http://kovecaps_api.test/${product.image}`}
+                        pic={product.image}
                         stock={product.stock}
                         border="border border-gray-200 shadow-lg"
                     />
-                ))}
+                ))
+                )}
+                
                 
             </div>
             

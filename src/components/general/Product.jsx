@@ -2,6 +2,7 @@ import React from 'react'
 import { ShoppingCart, Eye, SquarePen, Trash2 } from "lucide-react"
 import { Link } from 'react-router-dom'
 import { useCart } from '../../context/CartContext'
+import axios from '../../api/axios'
 
 const Product = ({ 
   id, 
@@ -22,6 +23,7 @@ const Product = ({
   onEdit 
 }) => {
   const { addToCart } = useCart();
+  const imageBaseUrl = axios.defaults.baseURL + '/'; 
   const isOutOfStock = stock < 1;
    const formatCurrency = (amount) => {
     return new Intl.NumberFormat('en-NG', {
@@ -43,7 +45,7 @@ const Product = ({
             className={`w-full h-full object-center object-cover transition-transform duration-300 ${
               isOutOfStock ? 'grayscale group-hover:scale-100' : 'group-hover:scale-105'
             }`} 
-            src={pic} 
+            src={imageBaseUrl + pic} 
             alt={name} 
           />
 

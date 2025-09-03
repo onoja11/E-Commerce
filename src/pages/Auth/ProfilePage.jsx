@@ -30,7 +30,7 @@ const ProfilePage = () => {
         localStorage.removeItem("token");
         setUser(null);
         setOrders([]);
-      } finally {
+      }finally {
         setLoading(false);
       }
     };
@@ -51,7 +51,9 @@ const ProfilePage = () => {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-100">
-        <p className="text-lg text-gray-600">Loading profile...</p>
+         <div className="w-12 h-12 bg-gradient-to-r from-black to-slate-500 rounded-lg flex items-center justify-center animate-pulse">
+                <span className="text-white font-bold text-sm">K</span>
+          </div>
       </div>
     );
   }

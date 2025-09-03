@@ -5,8 +5,8 @@ import axios from '../../../api/axios';
 
 const ViewOrders = () => {
  const [orders, setOrders] = useState([])
+ const [loading, setLoading] = useState(true);
     useEffect(() => {
-        // Simulated fetch (replace with your API call)
         const fetchorders = async () => {
           try { 
             const res = await axios.get('/api/admin/orders',
@@ -16,7 +16,8 @@ const ViewOrders = () => {
             }
     }
             );
-            setOrders(res.data); // Make sure API returns array of { id, name }
+            setOrders(res.data); 
+            setLoading(false);
             } catch (error) {
             console.error('Error fetching categories:', error.response?.data || error.message);
           }
@@ -39,6 +40,15 @@ const ViewOrders = () => {
     );
   };
 
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-100">
+          <div className="w-12 h-12 bg-gradient-to-r from-black to-slate-500 rounded-lg flex items-center justify-center animate-pulse">
+                <span className="text-white font-bold text-sm">K</span>
+          </div>
+      </div>
+    );
+  }
   return (
     <div className="p-4 sm:p-8 bg-gray-100 min-h-screen">
         {/* Header */}

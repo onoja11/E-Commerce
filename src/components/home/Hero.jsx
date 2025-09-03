@@ -1,5 +1,6 @@
 import React from 'react';
     import heroImg from '../../assets/IMG-20250526-WA0022-removebg-preview.png';
+import { Link } from 'react-router-dom';
 
 const Hero = () => {
   return (
@@ -17,14 +18,14 @@ const Hero = () => {
                         </p>
                         <div className="fade-in mt-5 sm:mt-8 sm:flex sm:justify-center lg:justify-start">
                             <div className="rounded-md shadow">
-                                <a href="#" className="w-full flex items-center justify-center px-9 py-3 border border-transparent text-base font-medium rounded-md text-white bg-black hover:bg-white hover:border-1 hover:border-black hover:text-black  transition duration-300 md:py-4 md:text-lg md:px-10">
+                                <Link to={"/caps"} className="w-full flex items-center justify-center px-9 py-3 border border-transparent text-base font-medium rounded-md text-white bg-black hover:bg-white hover:border-1 hover:border-black hover:text-black  transition duration-300 md:py-4 md:text-lg md:px-10">
                                     Shop Now
-                                </a>
+                                </Link>
                             </div>
                             <div className="mt-3 sm:mt-0 sm:ml-3">
-                                <a href="#" className="w-full flex items-center justify-center px-9 py-3 border-1 border-black text-base font-medium rounded-md text-black  hover:bg-black hover:text-white transition duration-300 md:py-4 md:text-lg md:px-10">
+                                <Link to={"/caps"} className="w-full flex items-center justify-center px-9 py-3 border-1 border-black text-base font-medium rounded-md text-black  hover:bg-black hover:text-white transition duration-300 md:py-4 md:text-lg md:px-10">
                                     Collections
-                                </a>
+                                </Link>
                             </div>
                         </div>
                     </div>

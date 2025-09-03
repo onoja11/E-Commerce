@@ -10,11 +10,13 @@ const EditOrder = () => {
   const {id} = useParams();
   const [orders, setOrders] = useState({})
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.get('/sanctum/csrf-cookie');      
+      await axios.get('/sanctum/csrf-cookie'); 
+      setLoading(true);     
       await axios.put(`/api/orders/ ${id}`, {status}, {
       headers: { Authorization: `Bearer ${token}` }
     });      
@@ -58,14 +60,6 @@ const EditOrder = () => {
         {success && <p className="text-green-600 mb-2">{success}</p>}
 
         <form onSubmit={handleSubmit} className="space-y-4">
-          {/* <input
-            type="text"
-            placeholder="Order name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            className="border border-gray-300 rounded-lg px-4 py-2 w-full focus:outline-none focus:ring-2 focus:ring-black"
-          /> */}
-
 
              <select
                 value={status}
@@ -90,7 +84,7 @@ const EditOrder = () => {
             type="submit"
             className="w-full bg-gradient-to-r from-black via-gray-500 to-gray-800 text-white py-3 rounded-lg hover:bg-gradient-to-l transition-all duration-300 font-semibold shadow-lg hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-black"
           >
-            Edit Order
+            {loading ? "Updating..." : "Edit Order"}
           </button>
         </form>
       </div>

@@ -9,7 +9,7 @@ const CategoriesList = () => {
 
 
   const [categories, setCategories] = useState([]);
-  // const [loadingCategories, setLoadingCategories] = useState(true);
+  const [loading, setLoading] = useState(true);
   
   useEffect(() => {
       const fetchCategories = async () => {
@@ -20,6 +20,7 @@ const CategoriesList = () => {
             }
           });
           setCategories(res.data); 
+          setLoading(false);
         } catch (error) {
           console.error('Error fetching categories:', error.response?.data || error.message);
         } 
@@ -45,7 +46,16 @@ const handleDelete = async (id) => {
   }
 };
 
-  
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-100"> 
+          <div className="w-12 h-12 bg-gradient-to-r from-black to-slate-500 rounded-lg flex items-center justify-center animate-pulse">
+                <span className="text-white font-bold text-sm">K</span>
+          </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen mt-16 bg-gray-100 p-6">

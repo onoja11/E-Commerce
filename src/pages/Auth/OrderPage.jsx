@@ -5,25 +5,32 @@ import { SquarePen, Trash2 } from "lucide-react";
 const OrdersPage = () => {
   const [orders, setOrders] = useState([]);
   const token = localStorage.getItem("token");
+  const [loading, setLoading] = useState(true);
+  const [loadingAction, setLoadingAction] = useState(false);
 
     useEffect(() => {
     if (token) {
       axios
         .get("/api/orders", {
           headers: { Authorization: `Bearer ${token}` },
-        })
-        .then((res) => setOrders(res.data))
+        }
+      )
+        .then((res) => {
+          setOrders(res.data);
+          setLoading(false);
+        }
+          )
         .catch((err) => console.error(err));
     }
   }, [token]);
 
-  const [loading, setLoading] = useState(false);
+
 
 const handleCancelOrder = async (orderId) => {
   if (!window.confirm("Are you sure you want to cancel this order?")) return;
 
   try {
-    setLoading(true);
+    setLoadingAction(true);
     await axios.put(
       `/api/orders/${orderId}/cancel`, // adjust API route if needed
       {},
@@ -39,7 +46,7 @@ const handleCancelOrder = async (orderId) => {
   } catch (err) {
     console.error("Error cancelling order:", err);
   } finally {
-    setLoading(false);
+    setLoadingAction(false);
   }
 };
 
@@ -73,6 +80,16 @@ const handleCancelOrder = async (orderId) => {
         return "bg-gray-100 text-black";
     }
   };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-100">
+          <div className="w-12 h-12 bg-gradient-to-r from-black to-slate-500 rounded-lg flex items-center justify-center animate-pulse">
+                <span className="text-white font-bold text-sm">K</span>
+          </div>
+      </div>
+    );
+  } 
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100">
@@ -116,7 +133,7 @@ const handleCancelOrder = async (orderId) => {
           </div>
         ) : (
           <div className="grid gap-8">
-            {orders.map((order, orderIndex) => (
+            {orders.map((order) => (
               <div
                 key={order.id}
                 className={`group relative bg-white rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-1 border border-gray-100 overflow-hidden ${
@@ -154,10 +171,10 @@ const handleCancelOrder = async (orderId) => {
                                 e.stopPropagation();
                                 handleCancelOrder(order.id);
                               }}
-                              disabled={loading}
+                              disabled={loadingAction}
                               className="px-6 py-3 bg-red-600 hover:bg-red-700 text-white font-bold rounded-xl transition-colors disabled:opacity-50"
                             >
-                              {loading ? "Cancelling..." : "Cancel Order"}
+                              {loadingAction ? "Cancelling..." : "Cancel Order"}
                             </button>
                           </div>
                         )}

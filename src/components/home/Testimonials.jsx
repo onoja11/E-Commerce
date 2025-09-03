@@ -8,6 +8,7 @@ import axios from '../../api/axios'
 const Testimonials = () => {
   const [reviews, setReviews] = useState([])
   const [showAll, setShowAll] = useState(false)
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     // Fetch reviews from API
@@ -15,6 +16,7 @@ const Testimonials = () => {
       try {
         const response = await axios.get('/api/reviews')
         setReviews(response.data)
+        setLoading(false);
       } catch (error) {
         console.error('Error fetching reviews:', error)
       }
@@ -35,7 +37,10 @@ const Testimonials = () => {
         </div>
 
         <div className="mt-12 grid gap-8 lg:grid-cols-3 md:grid-cols-2">
-          {reviews.length > 0 ? (
+          {loading ? (
+            <p className=''>Loading reviews...</p>
+          ) :
+          reviews.length > 0 ? (
             displayedReviews.map((review) => (
               <Testimonial
                 key={review.id}

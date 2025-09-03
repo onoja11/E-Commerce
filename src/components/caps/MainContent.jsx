@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import Product from '../general/Product'
 import Filter from './Filter'
 import axios from '../../api/axios'
+import {ChartBarStacked} from 'lucide-react'
 
 const MainContent = () => {
   const [products, setProducts] = useState([]);
@@ -55,10 +56,18 @@ const MainContent = () => {
                 ? product.description.substring(0, 30) + "..." 
                 : product.description}
               price={product.price}
-              pic={`http://kovecaps_api.test/${product.image}`}
+              pic={product.image}
               stock={product.stock}
             />
           ))}
+        </div>
+        <div className="flex justify-center mt-12">
+          {filteredProducts.length === 0 && (
+            <div>
+              <ChartBarStacked className="w-16 h-16 text-gray-400 mx-auto mb-4" />
+              <p className="text-gray-400 text-lg">No products found in this category.</p>
+            </div>
+          )}
         </div>
       </div>
     </section>

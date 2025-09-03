@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from '../../api/axios'; 
 import { useNavigate } from 'react-router-dom';
+import {useToast} from '../../context/ToastContext';
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -15,6 +16,7 @@ const Register = () => {
   const [success, setSuccess] = useState("");
   const [user, setUser] = useState(null);
   const navigate = useNavigate();
+  const { showToast } = useToast();
   
     
 
@@ -48,12 +50,10 @@ const Register = () => {
         password_confirmation: formData.confirm_password,
       });
 
-      console.log("Registration successful:", res.data);
 
-      setSuccess("Registration successful! Redirecting...");
+      showToast("Registration successful", "success");
 
-      // Redirect to login after 1s
-      // localStorage.setItem("user", JSON.stringify(res.data.user));
+      
       const token = localStorage.setItem("token", res.data.token);
       setTimeout(() => {
         navigate("/");

@@ -7,11 +7,13 @@ import axios from '../../api/axios'
 
 const Categories = () => {
     const [categories, setCategories] = useState([]);
+    const [loading, setLoading] = useState(true);
     useEffect(() => {
         const fetchCategories = async () => {
             try {
                 const res = await axios.get('/api/categories');
-                setCategories(res.data); // Make sure API returns array of { id, name }
+                setCategories(res.data);
+                setLoading(false);
             } catch (error) {
                 console.error('Error fetching categories:', error.response?.data || error.message
                 );
@@ -19,6 +21,7 @@ const Categories = () => {
         }
         fetchCategories();
     }, []);
+    const filteredCategories = categories.filter(category => category.products && category.products.length > 0);
 
   return (
       <div className="bg-gray-50 py-12 sm:py-16">
@@ -34,15 +37,17 @@ const Categories = () => {
 
             <div className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
               
-                {categories.slice(0, 3).map(category => (
-                    <Category key={category.id}
-                
-                        category={category.name}
-                        pic={category.products[0]?.image 
-                        ? `http://kovecaps_api.test/${category.products[0].image}` 
-                        : pic1}                        
-                    />  
-                ))}
+                {loading ? (
+                    <p>Loading categories...</p>
+                ) : (
+                    filteredCategories.slice(0, 3).map(category => (
+                        <Category key={category.id}
+                            category={category.name}
+                            pic={category.products[0]?.image}
+                        />
+                    ))
+                )}
+
             </div>
         </div>
     </div>

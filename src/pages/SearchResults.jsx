@@ -92,7 +92,7 @@ const SearchResults = () => {
                                   ? product.description.substring(0, 30) + "..." 
                                   : product.description}
                                 price={`${Number(product.price).toLocaleString()}`}
-                                pic={`http://kovecaps_api.test/${product.image}`}
+                                pic={product.image}
                                 stock={product.stock}
                                 textColor="text-gray-800"
                               />

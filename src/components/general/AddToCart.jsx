@@ -1,22 +1,33 @@
 import React, { useState } from 'react';
-import { X, Trash2 } from 'lucide-react';
+import { X, Trash2,ShoppingCart } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useCart } from '../../context/CartContext';
-import axios from '../../api/axios'; // your axios instance
+import axios from '../../api/axios'; 
+import {useToast} from '../../context/ToastContext';
 
 const AddToCart = ({ isOpen, onClose }) => {
   const { cart, removeFromCart, clearCart } = useCart();
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
+  const { showToast } = useToast();
+  const imageBaseUrl = axios.defaults.baseURL + '/'; 
 
   const navigate = useNavigate();
+   const formatCurrency = (amount) => {
+    return new Intl.NumberFormat('en-NG', {
+      style: 'currency',
+      currency: 'NGN'
+    }).format(amount);
+  };
 
   // Checkout handler
   const handleCheckout = async () => {
     if (cart.length === 0) {
       setMessage("Your cart is empty.");
+      showToast("Your cart is empty.", "error");
       return;
     }
+   
 
     setLoading(true);
     setMessage("");
@@ -40,11 +51,13 @@ const AddToCart = ({ isOpen, onClose }) => {
       // console.log("Order placed:", response.data.message);
 
       setMessage(response.data.message);
+      showToast("Order placed successfully!", "success");
       window.dispatchEvent(new Event("reviewStatusUpdated"));
-      clearCart(); // empty the cart after checkout
-      onClose();   // close the cart drawer
+      clearCart(); 
+      onClose();   
     } catch (error) {
       console.error(error.response?.data || error.message);
+      showToast(error.response?.data?.message || "Checkout failed. Please try again.", "error");
       setMessage(error.response?.data?.message || "Checkout failed.");
     } finally {
       setLoading(false);
@@ -73,18 +86,21 @@ const AddToCart = ({ isOpen, onClose }) => {
       {/* Cart Items */}
       <div className="overflow-y-auto px-6 py-4 space-y-6 h-[calc(100%-160px)]">
         {cart.length === 0 ? (
-          <p className="text-center text-gray-500">Your cart is empty.</p>
+          <div className="m-auto text-center mt-20 space-y-4">
+            <ShoppingCart className="w-12 h-12 mx-auto text-gray-300" />
+            <p className="text-center text-gray-500">Your cart is empty.</p>
+          </div>
         ) : (
           cart.map((item) => (
             <div key={item.id} className="flex items-center space-x-4">
               <img
-                src={item.image}
+                src={imageBaseUrl+item.image}
                 alt={item.name}
                 className="w-16 h-16 rounded-lg object-cover"
               />
               <div className="flex-1">
                 <h3 className="font-medium text-sm">{item.name}</h3>
-                <p className="text-gray-500 text-sm">${Number(item.price).toLocaleString()}</p>
+                <p className="text-gray-500 text-sm">{formatCurrency(Number(item.price).toLocaleString())}</p>
                 <p className="text-gray-400 text-xs">Qty: {item.quantity}</p>
               </div>
               <button
@@ -103,8 +119,8 @@ const AddToCart = ({ isOpen, onClose }) => {
         <div className="flex justify-between mb-3">
           <span className="text-gray-700 font-medium">Subtotal</span>
           <span className="font-semibold">
-            ${}
-            {Number(cart.reduce((acc, item) => acc + item.price * item.quantity, 0).toFixed(2)).toLocaleString()}
+            
+            {formatCurrency(Number(cart.reduce((acc, item) => acc + item.price * item.quantity, 0).toFixed(2)).toLocaleString())}
           </span>
         </div>
         <button

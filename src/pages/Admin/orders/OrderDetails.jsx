@@ -9,6 +9,7 @@ const OrderDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchOrderDetails = async () => {
@@ -19,10 +20,11 @@ const OrderDetails = () => {
 
         if (res.data.items) {
           const productsInOrder = res.data.items.map((item) => ({
-            ...item.product,      // include product fields
-            quantity: item.quantity, // add ordered quantity
+            ...item.product,      
+            quantity: item.quantity,
           }));
           setProducts(productsInOrder);
+          setLoading(false);
         } else {
           setProducts([]);
         }
@@ -59,6 +61,15 @@ const OrderDetails = () => {
     navigate(`/admin/product/${productId}`);
   };
 
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-100">
+          <div className="w-12 h-12 bg-gradient-to-r from-black to-slate-500 rounded-lg flex items-center justify-center animate-pulse">
+                <span className="text-white font-bold text-sm">K</span>
+          </div>
+      </div>
+    );
+  }
   return (
     <div className="min-h-screen my-8 py-12 px-4">
       <div className="max-w-5xl mx-auto">
@@ -75,13 +86,6 @@ const OrderDetails = () => {
               <p className="text-gray-600">Manage products in this order</p>
             </div>
           </div>
-
-          {/* <Link
-            to="/admin/create/product"
-            className="flex items-center bg-gradient-to-r from-black to-gray-600 text-white px-4 py-2 rounded-xl shadow hover:scale-[1.02] transition-all"
-          >
-            <Plus className="w-4 h-4 " /> Add Product
-          </Link> */}
         </div>
 
         {/* Products Grid */}
@@ -104,9 +108,7 @@ const OrderDetails = () => {
   }
   price={product.price}
   pic={
-    product.image?.startsWith("http")
-      ? product.image
-      : `http://kovecaps_api.test/${product.image}`
+    product.image
   }
   quantity={product.quantity}
   onDelete={handleDelete}

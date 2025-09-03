@@ -1,6 +1,7 @@
 import React from 'react'
 
 const Testimonial = ({ratings, name, location, review}) => {
+  
     const stars = []
   for (let i = 0; i < ratings; i++) {
     stars.push(
@@ -16,6 +17,7 @@ const Testimonial = ({ratings, name, location, review}) => {
       </svg>
     )
   }
+
   return (
   <div className="bg-gray-50 relative p-6 max-h-60  rounded-lg shadow-sm fade-in" style={{animationDelay: '0.1s'}}>
     <div className=" flex items-center">

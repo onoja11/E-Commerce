@@ -7,7 +7,7 @@ const Preview = () => {
   const { id } = useParams();
   const [product, setProduct] = useState({});
   const [quantity, setQuantity] = useState(1);
-  const imageBaseUrl = 'http://kovecaps_api.test/';
+  const imageBaseUrl = axios.defaults.baseURL + '/'; // Base URL for images
 
   const { addToCart } = useCart();
 

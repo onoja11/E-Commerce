@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useToast } from "../../context/ToastContext";
 import { CreditCard, ArrowUpRight, ArrowDownLeft, Plus } from "lucide-react";
 import axios from "../../api/axios";
 import PaymentButton from "../../components/wallet/PaymentButton";
@@ -9,6 +10,7 @@ const Wallet = () => {
   const [wallet, setWallet] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [amount, setAmount] = useState("");
+  const { showToast } = useToast();
 
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
@@ -33,10 +35,13 @@ const Wallet = () => {
 
   useEffect(() => {
     if (status === "success") {
-      alert(`Payment successful! Reference: ${reference}`);
+      showToast("Wallet funded successfully", "success");
+
       fetchWallet(); // refresh after success
     } else if (status === "failed") {
       alert(" Payment failed. Please try again.");
+      showToast("Wallet funding failed", "error");
+
     }
   }, [status, reference]);
 
@@ -100,10 +105,11 @@ const Wallet = () => {
                         : "bg-red-100 text-red-600"
                     }`}
                   >
-                    {transaction.description === "income" ? (
+                    {transaction.description === "income" || transaction.description === "pending"  ? (
                       <ArrowDownLeft className="w-5 h-5" />
-                    ) : (
-                      <ArrowUpRight className="w-5 h-5" />
+                    )
+                    :(
+                       <ArrowUpRight className="w-5 h-5" />
                     )}
                   </div>
                   <div>
@@ -119,10 +125,14 @@ const Wallet = () => {
                     className={`text-lg font-bold ${
                       transaction.description === "income"
                         ? "text-green-600"
+                        : transaction.description === "pending" 
+                        ? "text-yellow-600"
                         : "text-red-600"
                     }`}
                   >
-                    {transaction.description === "income" ? "+" : "-"}
+                    {transaction.description === "income" ? "+" :
+                    transaction.description === "pending" ? "" :
+                    "-"}
                     {formatCurrency(transaction.amount)}
                   </p>
                 </div>

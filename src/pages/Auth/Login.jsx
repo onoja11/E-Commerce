@@ -1,6 +1,7 @@
 import React, {  useState } from 'react';
 import axios from '../../api/axios'; 
 import { useNavigate } from 'react-router-dom';
+import {useToast} from '../../context/ToastContext';
 
 
 const Login = () => {
@@ -9,6 +10,7 @@ const Login = () => {
   const [error, setError] = useState("");
   const [user, setUser] = useState(null);
   const navigate = useNavigate();
+  const { showToast } = useToast();
 
   
   const handleLogin = async (e) => {
@@ -16,10 +18,7 @@ const Login = () => {
     setError("");
 
     try {
-      // 1. Get CSRF cookie
       await axios.get("/sanctum/csrf-cookie");
-
-      // 2. Login request
       const response = await axios.post("api/login", {
         email,
         password
@@ -30,10 +29,9 @@ const Login = () => {
       setUser(response.data.user);
 
 
-      // Optionally redirect to dashboard
       navigate( "/");
+      showToast("Login successful", "success");
     } catch (err) {
-      // console.error(err.response?.data );
       setError(err.response?.data?.message);
     }
   };

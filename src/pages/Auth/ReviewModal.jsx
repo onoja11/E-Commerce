@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import axios from "../../api/axios"; // your axios instance
+import axios from "../../api/axios"; 
+import { useToast } from "../../context/ToastContext";
 
 const ReviewModal = () => {
   const [show, setShow] = useState(false);
@@ -9,6 +10,7 @@ const ReviewModal = () => {
     comment: "",
     rating: ""
   });
+  const { showToast } = useToast();
 
   const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -52,6 +54,7 @@ const ReviewModal = () => {
         { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
       );
       setShow(false);
+      showToast("Your review has been saved.", "success");
     } catch (err) {
       console.error("Failed to update review status:", err);
     }

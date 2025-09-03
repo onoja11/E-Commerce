@@ -6,13 +6,15 @@ const AddCategory = () => {
   const [name, setName] = useState("");
   const [success, setSuccess] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
   const token = localStorage.getItem("token");
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.get('/sanctum/csrf-cookie');      
+      await axios.get('/sanctum/csrf-cookie'); 
+      setLoading(true);     
       await axios.post('/api/categories', {name}, {
       headers: { Authorization: `Bearer ${token}` }
     });      
@@ -53,7 +55,8 @@ const AddCategory = () => {
             type="submit"
             className="w-full bg-gradient-to-r from-black via-gray-500 to-gray-800 text-white py-3 rounded-lg hover:bg-gradient-to-l transition-all duration-300 font-semibold shadow-lg hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-black"
           >
-            Add Category
+            {loading ? "Adding..." : "Add Category"
+            }
           </button>
         </form>
       </div>

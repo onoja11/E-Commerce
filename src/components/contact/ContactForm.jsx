@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import axios from "../../api/axios"; // adjust path to your axios instance
+import axios from "../../api/axios"; 
+import { useToast } from "../../context/ToastContext";
 
 const ContactForm = () => {
   const [formData, setFormData] = useState({
@@ -14,6 +15,7 @@ const ContactForm = () => {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState("");
   const [errors, setErrors] = useState({});
+  const { showToast } = useToast();
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -27,7 +29,7 @@ const ContactForm = () => {
 
     try {
       await axios.post("/api/contact", formData);
-      setSuccess("Your message has been sent successfully!");
+      showToast("Message sent successfully!", "success");
       setFormData({
         firstname: "",
         lastname: "",

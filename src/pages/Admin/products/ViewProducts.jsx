@@ -6,14 +6,15 @@ import { Link, useNavigate } from 'react-router-dom';
 
 const ViewProducts = () => {
   const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
-  // Simulated fetch (replace with your API call)
    useEffect(() => {
       const fetchProducts = async () => {
         try {
           const res = await axios.get('/api/products');
-          setProducts(res.data); // Make sure API returns array of { id, name }
+          setProducts(res.data);
+          setLoading(false);
         } catch (error) {
           console.error('Error fetching categories:', error.response?.data || error.message);
         } 
@@ -38,12 +39,19 @@ const ViewProducts = () => {
   }
     
   };
-
   const handleEdit = (id) => {
     // alert(`Edit product with ID: ${id}`);
     navigate(`/admin/product/${id}`)
-    // Redirect or open modal for editing
   };
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-100">
+         <div className="w-12 h-12 bg-gradient-to-r from-black to-slate-500 rounded-lg flex items-center justify-center animate-pulse">
+                <span className="text-white font-bold text-sm">K</span>
+          </div>
+      </div>
+    );
+  } 
 
   return (
     <div className="min-h-screen my-8 py-12 px-4">
@@ -82,7 +90,7 @@ const ViewProducts = () => {
                           ? product.description.substring(0, 30) + "..." 
                           : product.description}
               price={product.price}
-              pic={`http://kovecaps_api.test/${product.image}`}
+              pic={product.image}
               stock={product.stock}
               onDelete={handleDelete}
               onEdit={handleEdit}

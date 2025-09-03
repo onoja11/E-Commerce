@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import axios from '../../api/axios';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import {useToast} from '../../context/ToastContext';
 
 
 const EditProfile = () => {
@@ -8,6 +9,7 @@ const EditProfile = () => {
   const [errors, setErrors] = useState({});
   const [generalError, setGeneralError] = useState("");
   const [success, setSuccess] = useState("");
+  const { showToast } = useToast();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -39,11 +41,8 @@ const EditProfile = () => {
         }
       });
       console.log("Profile updated successfully:", res.data);
-      setSuccess("Profile updated successfully! Redirecting...");
-      // Redirect to profile after 1s
-      setTimeout(() => {
+      showToast("Profile updated successfully", "success");
         navigate("/profile");
-      }, 1000);
     } catch (error) {
       console.error("Error updating profile:", error.response?.data || error.message);
       setGeneralError("Failed to update profile. Please try again.");
@@ -77,7 +76,12 @@ useEffect(() => {
 
   return (
  <div className='flex items-center justify-center min-h-screen mt-5 bg-gray-100'>
-      <div className='bg-white p-8 my-28 rounded-lg shadow-lg w-full max-w-md'>
+    
+      
+      <div className='bg-white p-8 my-28 rounded-lg shadow-lg w-full  max-w-md'>
+        <Link to="/profile" className="bg-black text-white px-4 py-2 rounded-lg  hover:bg-gray-800 transition">
+         profile
+      </Link>
         <h2 className='text-2xl font-bold mb-6 text-center'>Edit Profile</h2>
 
         <form
