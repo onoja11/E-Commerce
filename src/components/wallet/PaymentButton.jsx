@@ -14,7 +14,7 @@ const PaymentButton = ({ amount, email, user_id }) => {
       }, {
         headers: { Authorization: `Bearer ${token}` }
       });
-
+console.log(amount, email, user_id);
       const { authorization_url } = response.data;
       window.location.href = authorization_url; // redirect to Paystack checkout
     } catch (error) {
