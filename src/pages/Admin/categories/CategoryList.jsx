@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "../../../api/axios";
 import Category from "../../../components/home/Category";
 import pic1 from "../../../assets/pexels-cottonbro-5119522.jpg";
-import { ChartBarStacked, Trash2,SquarePen, Plus } from "lucide-react";
+import { ChartBarStacked, Trash2,SquarePen, Plus, Link } from "lucide-react";
 
 const CategoriesList = () => {
 //   const [categories, setCategories] = useState([]);
@@ -72,9 +72,9 @@ const handleDelete = async (id) => {
             </div>
           </div>
 
-            <a href="/admin/categories/add"  className="flex items-center bg-gradient-to-r from-black to-gray-600 text-white px-4 py-2 rounded-xl shadow hover:scale-[1.02] transition-all">
+            <Link to={'/admin/categories/add'}  className="flex items-center bg-gradient-to-r from-black to-gray-600 text-white px-4 py-2 rounded-xl shadow hover:scale-[1.02] transition-all">
             <Plus className="w-4 h-4 " /> Add Category
-            </a>
+            </Link>
         </div>
       {categories.length === 0 ? (
         <p className="text-center text-gray-500">No categories found</p>

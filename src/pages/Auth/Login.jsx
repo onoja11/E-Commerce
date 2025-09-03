@@ -1,6 +1,6 @@
 import React, {  useState } from 'react';
 import axios from '../../api/axios'; 
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import {useToast} from '../../context/ToastContext';
 
 
@@ -76,10 +76,10 @@ const Login = () => {
           <div className="bg-black/50 p-[0.5px] my-8"></div>
 
           <p className='text-sm text-gray-600 text-center'>
-            Don't have an account? <a href='/register' className='text-black font-semibold hover:underline'>Register</a>    
+            Don't have an account? <Link to={'/register'} className='text-black font-semibold hover:underline'>Register</Link>    
           </p>
           <p className='text-sm text-gray-600 text-center mt-2'>
-            <a href='/forgot-password' className='text-black font-semibold hover:underline'>Forgot Password?</a>
+            <Link to={'/forgot-password'} className='text-black font-semibold hover:underline'>Forgot Password?</Link>
           </p>
         </form>
       </div>

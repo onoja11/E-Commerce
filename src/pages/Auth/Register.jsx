@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from '../../api/axios'; 
 import { useNavigate } from 'react-router-dom';
 import {useToast} from '../../context/ToastContext';
+import { Link } from 'lucide-react';
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -53,7 +54,8 @@ const Register = () => {
 
       showToast("Registration successful", "success");
 
-      
+      // Redirect to login after 1s
+      // localStorage.setItem("user", JSON.stringify(res.data.user));
       const token = localStorage.setItem("token", res.data.token);
       setTimeout(() => {
         navigate("/");
@@ -157,7 +159,7 @@ const Register = () => {
           <div className="bg-black/50 p-[0.5px] my-8"></div>
 
           <p className='text-sm text-gray-600 text-center'>
-            Already have an account? <a href='/login' className='text-black font-semibold hover:underline'>Login</a>    
+            Already have an account? <Link to={'/login'} className='text-black font-semibold hover:underline'>Login</Link>    
           </p>  
         </form>
       </div>
