@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import axios from "../../../api/axios";
+import { Link  } from "react-router-dom";
 import Category from "../../../components/home/Category";
 import pic1 from "../../../assets/pexels-cottonbro-5119522.jpg";
-import { ChartBarStacked, Trash2,SquarePen, Plus, Link } from "lucide-react";
+import { ChartBarStacked, Trash2,SquarePen, Plus } from "lucide-react";
 
 const CategoriesList = () => {
 //   const [categories, setCategories] = useState([]);
