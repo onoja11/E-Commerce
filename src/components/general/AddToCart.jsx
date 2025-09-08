@@ -119,8 +119,7 @@ const AddToCart = ({ isOpen, onClose }) => {
         <div className="flex justify-between mb-3">
           <span className="text-gray-700 font-medium">Subtotal</span>
           <span className="font-semibold">
-            
-            {
+            ₦{              
               cart.reduce((acc, item) => acc + item.price * item.quantity, 0)
             }
           </span>

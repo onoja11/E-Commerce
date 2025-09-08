@@ -43,7 +43,7 @@ const Wallet = () => {
       showToast("Wallet funding failed", "error");
 
     }
-  }, [status, reference]);
+  }, [status, reference, showToast]);
 
   const formatCurrency = (amount) => {
     return new Intl.NumberFormat("en-NG", {
@@ -168,6 +168,7 @@ const Wallet = () => {
               amount={Number(amount)}
               email={wallet?.user?.email}
               user_id={wallet?.user_id}
+              disabled={!wallet}
             />
 
             <button
