@@ -36,7 +36,7 @@ const Wallet = () => {
   useEffect(() => {
     if (status === "success") {
       showToast("Wallet funded successfully", "success");
-      fetchWallet(); // refresh after success
+      fetchWallet();
     } else if (status === "failed") {
       showToast("Wallet funding failed", "error");
     }
@@ -101,14 +101,17 @@ const Wallet = () => {
                         : "bg-red-100 text-red-600"
                     }`}
                   >
-                    {transaction.description === "income" || transaction.description === "pending" ? (
+                    {transaction.description === "income" ||
+                    transaction.description === "pending" ? (
                       <ArrowDownLeft className="w-5 h-5" />
                     ) : (
                       <ArrowUpRight className="w-5 h-5" />
                     )}
                   </div>
                   <div>
-                    <h3 className="font-semibold text-gray-800">{transaction.description}</h3>
+                    <h3 className="font-semibold text-gray-800">
+                      {transaction.description}
+                    </h3>
                     <p className="text-sm text-gray-500">
                       {transaction.created_at.split("T")[0]}
                     </p>
@@ -141,7 +144,9 @@ const Wallet = () => {
             <div className="text-center py-12">
               <CreditCard className="w-16 h-16 text-gray-300 mx-auto mb-4" />
               <p className="text-gray-500 text-lg">No transactions yet</p>
-              <p className="text-gray-400">Add your first transaction to get started</p>
+              <p className="text-gray-400">
+                Add your first transaction to get started
+              </p>
             </div>
           )}
         </div>
