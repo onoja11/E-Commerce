@@ -101,7 +101,7 @@ const Navbar = () => {
       localStorage.removeItem("token");
       showToast("Logged out successfully", "success");
       setIsMobileMenuOpen(false);
-      window.location = "/login";
+      window.location = "/";
     } catch (error) {
       console.error("Logout error:", error);
     }
