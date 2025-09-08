@@ -23,7 +23,7 @@ const Product = ({
   onEdit 
 }) => {
   const { addToCart } = useCart();
-  const imageBaseUrl = axios.defaults.baseURL + '/'; 
+  const imageBaseUrl = axios.defaults.baseURL + '/storage/'; 
   const isOutOfStock = stock < 1;
    const formatCurrency = (amount) => {
     return new Intl.NumberFormat('en-NG', {

@@ -5,7 +5,7 @@ import pic1 from '../../assets/pexels-cottonbro-5119522.jpg';
 
 
 const Category = ({category, pic}) => {
-    const imageBaseUrl = axios.defaults.baseURL + '/'; // Base URL for images
+    const imageBaseUrl = axios.defaults.baseURL + '/storage/'; // Base URL for images
   return (
 <div className="group cursor-pointer relative  fade-in" >
    

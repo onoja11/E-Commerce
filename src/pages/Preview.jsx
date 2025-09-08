@@ -7,7 +7,7 @@ const Preview = () => {
   const { id } = useParams();
   const [product, setProduct] = useState({});
   const [quantity, setQuantity] = useState(1);
-  const imageBaseUrl = axios.defaults.baseURL + '/'; // Base URL for images
+  const imageBaseUrl = axios.defaults.baseURL + '/storage/'; // Base URL for images
 
   const { addToCart } = useCart();
 

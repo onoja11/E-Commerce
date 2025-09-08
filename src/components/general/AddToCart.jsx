@@ -10,7 +10,7 @@ const AddToCart = ({ isOpen, onClose }) => {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
   const { showToast } = useToast();
-  const imageBaseUrl = axios.defaults.baseURL + '/'; 
+  const imageBaseUrl = axios.defaults.baseURL + '/storage/'; 
 
   const navigate = useNavigate();
    const formatCurrency = (amount) => {
