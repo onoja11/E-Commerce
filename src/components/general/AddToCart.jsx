@@ -120,9 +120,9 @@ const AddToCart = ({ isOpen, onClose }) => {
           <span className="text-gray-700 font-medium">Subtotal</span>
           <span className="font-semibold">
             
-            {formatCurrency(
+            {
               cart.reduce((acc, item) => acc + item.price * item.quantity, 0)
-            )}
+            }
           </span>
         </div>
         <button
