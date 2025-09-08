@@ -13,7 +13,6 @@ const PaymentButton = ({ amount }) => {
       const response = await axios.post('/api/pay', {
         amount,
         email: user.email,
-        user_id: user.id
       }, {
         headers: { Authorization: `Bearer ${token}` }
       });
