@@ -166,8 +166,6 @@ const Wallet = () => {
             {/* Payment Button with Dynamic Amount */}
             <PaymentButton
               amount={Number(amount)}
-              email={wallet?.user?.email}
-              user_id={wallet?.user_id}
             />
 
             <button

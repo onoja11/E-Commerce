@@ -2,19 +2,19 @@ import React from 'react';
 import axios from '../../api/axios';
 import { Send } from 'lucide-react';
 
-const PaymentButton = ({ amount, email, user_id }) => {
+const PaymentButton = ({ amount }) => {
   const token = localStorage.getItem('token');
+  const user = JSON.parse(localStorage.getItem('user'));
 
   const handlePayment = async () => {
     try {
       const response = await axios.post('/api/pay', {
         amount,
-        email,
-        user_id
+        email: user.email,
+        user_id: user.id
       }, {
         headers: { Authorization: `Bearer ${token}` }
       });
-      console.log(amount, email, user_id);
       const { authorization_url } = response.data;
       window.location.href = authorization_url; // redirect to Paystack checkout
     } catch (error) {
