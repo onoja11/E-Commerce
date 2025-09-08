@@ -2,7 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useToast } from "../../context/ToastContext";
 import { CreditCard, ArrowUpRight, ArrowDownLeft, Plus } from "lucide-react";
 import axios from "../../api/axios";
-import { useLocation, useNavigate } from "react-router-dom";
+import PaymentButton from "../../components/wallet/PaymentButton";
+import { useLocation } from "react-router-dom";
 
 const Wallet = () => {
   const [transactions, setTransactions] = useState([]);
@@ -12,13 +13,10 @@ const Wallet = () => {
   const { showToast } = useToast();
 
   const location = useLocation();
-  const navigate = useNavigate();
-
   const queryParams = new URLSearchParams(location.search);
   const status = queryParams.get("status");
   const reference = queryParams.get("reference");
 
-  // Fetch wallet + transactions
   const fetchWallet = async () => {
     try {
       const res = await axios.get("/api/wallets/", {
@@ -28,7 +26,6 @@ const Wallet = () => {
       setTransactions(res.data.transactions || []);
     } catch (error) {
       console.error("Error fetching wallet:", error.response?.data || error.message);
-      showToast("Failed to fetch wallet", "error");
     }
   };
 
@@ -36,41 +33,23 @@ const Wallet = () => {
     fetchWallet();
   }, []);
 
-  // Handle callback redirect from Paystack
   useEffect(() => {
     if (status === "success") {
       showToast("Wallet funded successfully", "success");
-      fetchWallet();
-      navigate("/wallet", { replace: true }); // clear query params
-    } else if (status === "failed") {
-      showToast("Wallet funding failed", "error");
-      navigate("/wallet", { replace: true });
-    }
-  }, [status, reference, showToast, navigate]);
 
-  const formatCurrency = (amount) =>
-    new Intl.NumberFormat("en-NG", {
+      fetchWallet(); // refresh after success
+    } else if (status === "failed") {
+      alert(" Payment failed. Please try again.");
+      showToast("Wallet funding failed", "error");
+
+    }
+  }, [status, reference, showToast]);
+
+  const formatCurrency = (amount) => {
+    return new Intl.NumberFormat("en-NG", {
       style: "currency",
       currency: "NGN",
     }).format(amount || 0);
-
-  // Trigger Paystack initialize API
-  const handleFundWallet = async () => {
-    if (!amount || Number(amount) < 100) {
-      showToast("Enter a valid amount (min ₦100)", "error");
-      return;
-    }
-    try {
-      const res = await axios.post(
-        "/api/pay/initialize",
-        { amount: Number(amount), email: localStorage.getItem("email") },
-        { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
-      );
-      window.location.href = res.data.authorization_url; // redirect to Paystack
-    } catch (error) {
-      console.error(error.response?.data || error.message);
-      showToast("Failed to initialize payment", "error");
-    }
   };
 
   return (
@@ -84,9 +63,10 @@ const Wallet = () => {
               My Wallet
             </h1>
 
+            {/* Open Modal Button */}
             <button
               onClick={() => setShowModal(true)}
-              className="flex items-center gap-2 px-4 py-2 bg-black rounded text-white shadow hover:bg-black/70 transition"
+              className="flex items-center gap-2 px-4 py-2 bg-black rounded text-white  shadow hover:bg-black/70 transition"
             >
               <Plus className="w-5 h-5" />
               Add Funds
@@ -105,7 +85,7 @@ const Wallet = () => {
           </div>
         </div>
 
-        {/* Transactions */}
+        {/* Recent Transactions */}
         <div className="bg-white rounded-2xl shadow-lg p-6 my-9">
           <h2 className="text-2xl font-bold text-gray-800 mb-6">Recent Transactions</h2>
 
@@ -125,10 +105,11 @@ const Wallet = () => {
                         : "bg-red-100 text-red-600"
                     }`}
                   >
-                    {transaction.description === "income" || transaction.description === "pending" ? (
+                    {transaction.description === "income" || transaction.description === "pending"  ? (
                       <ArrowDownLeft className="w-5 h-5" />
-                    ) : (
-                      <ArrowUpRight className="w-5 h-5" />
+                    )
+                    :(
+                       <ArrowUpRight className="w-5 h-5" />
                     )}
                   </div>
                   <div>
@@ -144,16 +125,14 @@ const Wallet = () => {
                     className={`text-lg font-bold ${
                       transaction.description === "income"
                         ? "text-green-600"
-                        : transaction.description === "pending"
+                        : transaction.description === "pending" 
                         ? "text-yellow-600"
                         : "text-red-600"
                     }`}
                   >
-                    {transaction.description === "income"
-                      ? "+"
-                      : transaction.description === "pending"
-                      ? ""
-                      : "-"}
+                    {transaction.description === "income" ? "+" :
+                    transaction.description === "pending" ? "" :
+                    "-"}
                     {formatCurrency(transaction.amount)}
                   </p>
                 </div>
@@ -184,12 +163,10 @@ const Wallet = () => {
               className="w-full border border-gray-300 rounded-lg px-3 py-2 mb-4 focus:outline-none focus:ring-2 focus:ring-indigo-500"
             />
 
-            <button
-              onClick={handleFundWallet}
-              className="w-full px-4 py-2 bg-black text-white rounded-lg hover:bg-black/80"
-            >
-              Pay with Paystack
-            </button>
+            {/* Payment Button with Dynamic Amount */}
+            <PaymentButton
+              amount={Number(amount)}
+            />
 
             <button
               onClick={() => setShowModal(false)}
