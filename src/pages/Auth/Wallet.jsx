@@ -1,14 +1,21 @@
 import React, { useState, useEffect } from "react";
+import { useToast } from "../../context/ToastContext";
 import { CreditCard, ArrowUpRight, ArrowDownLeft, Plus } from "lucide-react";
 import axios from "../../api/axios";
 import PaymentButton from "../../components/wallet/PaymentButton";
+import { useLocation } from "react-router-dom";
 
 const Wallet = () => {
   const [transactions, setTransactions] = useState([]);
   const [wallet, setWallet] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [amount, setAmount] = useState("");
- 
+  const { showToast } = useToast();
+
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const status = queryParams.get("status");
+  const reference = queryParams.get("reference");
 
   const fetchWallet = async () => {
     try {
@@ -26,7 +33,17 @@ const Wallet = () => {
     fetchWallet();
   }, []);
 
+  useEffect(() => {
+    if (status === "success") {
+      showToast("Wallet funded successfully", "success");
 
+      fetchWallet(); // refresh after success
+    } else if (status === "failed") {
+      alert(" Payment failed. Please try again.");
+      showToast("Wallet funding failed", "error");
+
+    }
+  }, [status, reference, showToast]);
 
   const formatCurrency = (amount) => {
     return new Intl.NumberFormat("en-NG", {
@@ -149,6 +166,7 @@ const Wallet = () => {
             {/* Payment Button with Dynamic Amount */}
             <PaymentButton
               amount={Number(amount)}
+
             />
 
             <button
