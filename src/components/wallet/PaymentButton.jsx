@@ -6,8 +6,10 @@ const PaymentButton = ({ amount }) => {
   const token = localStorage.getItem('token');
   const user = JSON.parse(localStorage.getItem('user'));
 
+
   const handlePayment = async () => {
     try {
+      console.log("Initiating payment for amount:", amount, "user:", user);
       const response = await axios.post('/api/pay', {
         amount,
         email: user.email,
