@@ -9,7 +9,7 @@ createRoot(document.getElementById('root')).render(
   <StrictMode>
     <CartProvider>
       <ToastProvider>
-      <App />
+      <App/>
       </ToastProvider>
     </CartProvider>
   </StrictMode>,
