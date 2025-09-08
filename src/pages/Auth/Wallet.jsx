@@ -36,12 +36,9 @@ const Wallet = () => {
   useEffect(() => {
     if (status === "success") {
       showToast("Wallet funded successfully", "success");
-
       fetchWallet(); // refresh after success
     } else if (status === "failed") {
-      alert(" Payment failed. Please try again.");
       showToast("Wallet funding failed", "error");
-
     }
   }, [status, reference, showToast]);
 
@@ -63,10 +60,9 @@ const Wallet = () => {
               My Wallet
             </h1>
 
-            {/* Open Modal Button */}
             <button
               onClick={() => setShowModal(true)}
-              className="flex items-center gap-2 px-4 py-2 bg-black rounded text-white  shadow hover:bg-black/70 transition"
+              className="flex items-center gap-2 px-4 py-2 bg-black rounded text-white shadow hover:bg-black/70 transition"
             >
               <Plus className="w-5 h-5" />
               Add Funds
@@ -105,11 +101,10 @@ const Wallet = () => {
                         : "bg-red-100 text-red-600"
                     }`}
                   >
-                    {transaction.description === "income" || transaction.description === "pending"  ? (
+                    {transaction.description === "income" || transaction.description === "pending" ? (
                       <ArrowDownLeft className="w-5 h-5" />
-                    )
-                    :(
-                       <ArrowUpRight className="w-5 h-5" />
+                    ) : (
+                      <ArrowUpRight className="w-5 h-5" />
                     )}
                   </div>
                   <div>
@@ -125,14 +120,16 @@ const Wallet = () => {
                     className={`text-lg font-bold ${
                       transaction.description === "income"
                         ? "text-green-600"
-                        : transaction.description === "pending" 
+                        : transaction.description === "pending"
                         ? "text-yellow-600"
                         : "text-red-600"
                     }`}
                   >
-                    {transaction.description === "income" ? "+" :
-                    transaction.description === "pending" ? "" :
-                    "-"}
+                    {transaction.description === "income"
+                      ? "+"
+                      : transaction.description === "pending"
+                      ? ""
+                      : "-"}
                     {formatCurrency(transaction.amount)}
                   </p>
                 </div>
@@ -163,13 +160,13 @@ const Wallet = () => {
               className="w-full border border-gray-300 rounded-lg px-3 py-2 mb-4 focus:outline-none focus:ring-2 focus:ring-indigo-500"
             />
 
-            {/* Payment Button with Dynamic Amount */}
-            <PaymentButton
-              amount={Number(amount)}
-            />
+            <PaymentButton amount={Number(amount) || 0} />
 
             <button
-              onClick={() => setShowModal(false)}
+              onClick={() => {
+                setShowModal(false);
+                setAmount("");
+              }}
               className="mt-4 w-full px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300"
             >
               Cancel
