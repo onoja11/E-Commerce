@@ -25,8 +25,6 @@ const PaymentButton = ({ amount, email, user_id }) => {
   return (
     <button 
       onClick={handlePayment} 
-      disabled={!email || !user_id || amount <= 0}
-
       className="bg-black text-white px-4 py-2 w-full rounded hover:bg-black/70">
         <Send className="w-4 h-4 inline-block mr-2" />
       Deposit

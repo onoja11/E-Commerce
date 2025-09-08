@@ -168,7 +168,6 @@ const Wallet = () => {
               amount={Number(amount)}
               email={wallet?.user?.email}
               user_id={wallet?.user_id}
-              disabled={!wallet}
             />
 
             <button
