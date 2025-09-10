@@ -45,15 +45,7 @@ const ViewProducts = () => {
     // alert(`Edit product with ID: ${id}`);
     navigate(`/admin/product/${id}`)
   };
-  if (loading) {
-    return (
-       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 md:px-5 gap-8">
-            {Array.from({ length: 8 }).map(() => (
-              <ProductSkeleton/>
-            ))}
-          </div>
-    )
-  } 
+ 
 
   return (
     <div className="min-h-screen my-8 py-12 px-4">
@@ -78,7 +70,16 @@ const ViewProducts = () => {
         </div>
 
         {/* Products Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {
+          loading ?(
+             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 md:px-5 gap-8">
+            {Array.from({ length: 8 }).map(() => (
+              <ProductSkeleton/>
+            ))}
+          </div>
+          ) : (
+            <>
+             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {products.map((product) => (
             <Product textColor="text-gray-800"
             border="border border-gray-200 shadow-lg"
@@ -105,6 +106,10 @@ const ViewProducts = () => {
             No products available.
           </p>
         )}
+            </>
+          )
+        }
+       
       </div>
     </div>
   );

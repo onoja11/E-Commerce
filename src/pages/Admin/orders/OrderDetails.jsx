@@ -63,13 +63,7 @@ const OrderDetails = () => {
     navigate(`/admin/product/${productId}`);
   };
 
-  if (loading) {
-    return ( <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 md:px-5 gap-8">
-            {Array.from({ length: 8 }).map(() => (
-              <ProductSkeleton/>
-            ))}
-          </div>)
-  }
+ 
   return (
     <div className="min-h-screen my-8 py-12 px-4">
       <div className="max-w-5xl mx-auto">
@@ -87,8 +81,15 @@ const OrderDetails = () => {
             </div>
           </div>
         </div>
-
-        {/* Products Grid */}
+        {loading? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 md:px-5 gap-8">
+            {Array.from({ length: 8 }).map(() => (
+              <ProductSkeleton/>
+            ))}
+          </div>
+        ): (
+          <>
+           {/* Products Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {products.map((product) => (
             <Product
@@ -123,6 +124,11 @@ const OrderDetails = () => {
             No products available in this order.
           </p>
         )}
+          </>
+        )
+      }
+
+       
       </div>
     </div>
   );
