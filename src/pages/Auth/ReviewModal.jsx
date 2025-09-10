@@ -26,7 +26,7 @@ const ReviewModal = () => {
         setReviewStatus(res.data.review_status);
         console.log(res.data.review_status);
 
-        if (res.data.review_status === '1') {
+        if (res.data.review_status === 1) {
           setTimeout(() => setShow(true), 20000); // wait 20s then show modal
         }
       } catch (err) {
