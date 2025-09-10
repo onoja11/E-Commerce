@@ -10,7 +10,6 @@ const LoadingSpinner = () => {
           </div>
           <div className="absolute -inset-2 bg-gradient-to-r from-black/20 to-slate-500/20 rounded-2xl animate-ping"></div>
         </div>
-        <p className="text-gray-600 font-medium">Loading your profile...</p>
       </div>
     </div>
       )
