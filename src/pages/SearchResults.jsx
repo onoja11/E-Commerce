@@ -91,7 +91,7 @@ const SearchResults = () => {
                                 description={product.description.length > 30 
                                   ? product.description.substring(0, 30) + "..." 
                                   : product.description}
-                                price={`${Number(product.price).toLocaleString()}`}
+                                price={product.price}
                                 pic={product.image}
                                 stock={product.stock}
                                 textColor="text-gray-800"
