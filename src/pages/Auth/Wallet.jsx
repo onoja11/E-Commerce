@@ -101,7 +101,7 @@ const Wallet = () => {
     <div className="min-h-screen bg-gradient-to-br mt-12 sm:mt-16 from-blue-50 to-indigo-100 p-2 sm:p-4">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="bg-white rounded-xl sm:rounded-2xl shadow-lg p-4 sm:p-6 mb-4 sm:mb-6">
+        <div className="bg-white rounded-xl sm:rounded-2xl shadow-lg p-4 mt-5 sm:p-6 mb-4 sm:mb-6">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4 sm:mb-6">
             <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-800 flex items-center gap-2 sm:gap-3">
               <CreditCard className="w-6 h-6 sm:w-8 sm:h-8 text-black" />
