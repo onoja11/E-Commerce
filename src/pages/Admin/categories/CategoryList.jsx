@@ -4,6 +4,7 @@ import { Link  } from "react-router-dom";
 import Category from "../../../components/home/Category";
 import pic1 from "../../../assets/pexels-cottonbro-5119522.jpg";
 import { ChartBarStacked, Trash2,SquarePen, Plus } from "lucide-react";
+import LoadingSpinner from "../../../components/general/LoadingSpinner";
 
 const CategoriesList = () => {
 //   const [categories, setCategories] = useState([]);
@@ -49,13 +50,7 @@ const handleDelete = async (id) => {
 
 
   if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-100"> 
-          <div className="w-12 h-12 bg-gradient-to-r from-black to-slate-500 rounded-lg flex items-center justify-center animate-pulse">
-                <span className="text-white font-bold text-sm">K</span>
-          </div>
-      </div>
-    );
+    return <LoadingSpinner/>
   }
 
   return (

@@ -3,6 +3,7 @@ import { Package, Tag, DollarSign, Edit3, Trash2, Plus } from "lucide-react";
 import Product from "../../../components/general/Product";
 import axios from "../../../api/axios";
 import { Link, useNavigate } from 'react-router-dom'; 
+import LoadingSpinner from "../../../components/general/LoadingSpinner";
 
 const ViewProducts = () => {
   const [products, setProducts] = useState([]);
@@ -44,13 +45,7 @@ const ViewProducts = () => {
     navigate(`/admin/product/${id}`)
   };
   if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-100">
-         <div className="w-12 h-12 bg-gradient-to-r from-black to-slate-500 rounded-lg flex items-center justify-center animate-pulse">
-                <span className="text-white font-bold text-sm">K</span>
-          </div>
-      </div>
-    );
+    return <LoadingSpinner/>
   } 
 
   return (

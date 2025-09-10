@@ -38,8 +38,10 @@ const Testimonials = () => {
 
         <div className="mt-12 grid gap-8 lg:grid-cols-3 md:grid-cols-2">
           {loading ? (
-            <p className=''>Loading reviews...</p>
-          ) :
+              <div className="col-span-full flex justify-center items-center py-12">
+                  <div className="h-10 w-10 border-4 border-black border-t-transparent rounded-full animate-spin"></div>
+              </div>    
+                ) :
           reviews.length > 0 ? (
             displayedReviews.map((review) => (
               <Testimonial

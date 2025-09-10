@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from '../../api/axios';
 import {Link} from 'react-router-dom';
 import { Package, TrendingUp, MapPin, Mail, Calendar, User, Settings, ShoppingBag } from 'lucide-react';
+import LoadingSpinner from '../../components/general/LoadingSpinner';
 
 const ProfilePage = () => {
   const [user, setUser] = useState(null);
@@ -42,24 +43,11 @@ const ProfilePage = () => {
   const totalSpent = orders.reduce((acc, order) => acc + parseFloat(order.total_amount || 0), 0);
 
   const stats = [
-    { number: orders.length, label: 'Total Orders', icon: Package, color: 'from-blue-500 to-blue-600' },
-    { number: `$${Number(totalSpent).toLocaleString()}`, label: 'Total Spent', icon: TrendingUp, color: 'from-green-500 to-green-600' },
+    { number: orders.length, label: 'Total Orders', icon: Package, color: 'from-black to-gray-600' },
+    { number: `$${Number(totalSpent).toLocaleString()}`, label: 'Total Spent', icon: TrendingUp, color: 'from-black to-gray-600' },
   ];
 
-  // Enhanced loading component
-  const LoadingSpinner = () => (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="flex flex-col items-center space-y-4">
-        <div className="relative">
-          <div className="w-16 h-16 bg-gradient-to-r from-black to-slate-500 rounded-2xl flex items-center justify-center animate-pulse shadow-xl">
-            <span className="text-white font-bold text-xl">K</span>
-          </div>
-          <div className="absolute -inset-2 bg-gradient-to-r from-black/20 to-slate-500/20 rounded-2xl animate-ping"></div>
-        </div>
-        <p className="text-gray-600 font-medium">Loading your profile...</p>
-      </div>
-    </div>
-  );
+  
 
   if (loading) {
     return <LoadingSpinner />;
@@ -109,7 +97,6 @@ const ProfilePage = () => {
                   <h1 className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent mb-2">
                     {user.name || "Unnamed User"}
                   </h1>
-                  <p className="text-sm sm:text-base text-gray-600 font-medium">Premium Member</p>
                 </div>
                 
                 {/* Action Buttons */}
@@ -210,43 +197,6 @@ const ProfilePage = () => {
               {orders.length === 0 && (
                 <p className="text-sm text-gray-500 text-center py-4">No recent orders</p>
               )}
-            </div>
-          </div>
-
-          {/* Account Status Card */}
-          <div className="bg-white rounded-xl sm:rounded-2xl p-4 sm:p-6 shadow-lg border border-white/10">
-            <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-3 sm:mb-4 flex items-center gap-2">
-              <User className="w-5 h-5" />
-              Account Status
-            </h3>
-            <div className="space-y-3">
-              <div className="flex justify-between items-center">
-                <span className="text-sm text-gray-600">Status</span>
-                <span className="px-2 py-1 bg-green-100 text-green-800 text-xs font-medium rounded-full">Active</span>
-              </div>
-              <div className="flex justify-between items-center">
-                <span className="text-sm text-gray-600">Verification</span>
-                <span className="px-2 py-1 bg-blue-100 text-blue-800 text-xs font-medium rounded-full">Verified</span>
-              </div>
-              <div className="flex justify-between items-center">
-                <span className="text-sm text-gray-600">Member Type</span>
-                <span className="px-2 py-1 bg-purple-100 text-purple-800 text-xs font-medium rounded-full">Premium</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Quick Actions Card */}
-          <div className="bg-white rounded-xl sm:rounded-2xl p-4 sm:p-6 shadow-lg border border-white/10 md:col-span-2 lg:col-span-1">
-            <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-3 sm:mb-4">Quick Actions</h3>
-            <div className="grid grid-cols-2 gap-3">
-              <button className="p-3 bg-gray-50 hover:bg-gray-100 rounded-lg transition-colors duration-200 text-center">
-                <Settings className="w-5 h-5 mx-auto mb-1 text-gray-700" />
-                <span className="text-xs font-medium text-gray-700">Settings</span>
-              </button>
-              <button className="p-3 bg-gray-50 hover:bg-gray-100 rounded-lg transition-colors duration-200 text-center">
-                <Mail className="w-5 h-5 mx-auto mb-1 text-gray-700" />
-                <span className="text-xs font-medium text-gray-700">Support</span>
-              </button>
             </div>
           </div>
         </div>

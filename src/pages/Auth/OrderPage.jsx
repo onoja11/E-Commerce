@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from '../../api/axios';
 import { SquarePen, Trash2 } from "lucide-react";
+import LoadingSpinner from "../../components/general/LoadingSpinner";
 
 const OrdersPage = () => {
   const [orders, setOrders] = useState([]);
@@ -82,13 +83,7 @@ const handleCancelOrder = async (orderId) => {
   };
 
   if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-100">
-          <div className="w-12 h-12 bg-gradient-to-r from-black to-slate-500 rounded-lg flex items-center justify-center animate-pulse">
-                <span className="text-white font-bold text-sm">K</span>
-          </div>
-      </div>
-    );
+    return <LoadingSpinner/>
   } 
 
   return (

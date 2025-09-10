@@ -36,8 +36,10 @@ const Products = () => {
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mt-10">
                 {loading ? (
-                    <p>Loading products...</p>
-                ) : (
+                    <div className="col-span-full flex justify-center items-center py-12">
+                        <div className="h-10 w-10 border-4 border-white border-t-transparent rounded-full animate-spin"></div>
+                    </div>
+                        ) : (
                 products.slice(0,4).map(product => (
                     <Product
                         key={product.id}

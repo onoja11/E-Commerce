@@ -24,33 +24,35 @@ const Categories = () => {
     const filteredCategories = categories.filter(category => category.products && category.products.length > 0);
 
   return (
-      <div className="bg-gray-50 py-12 sm:py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center">
-                <h2 className="text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl fade-in">
-                    Shop By Category
-                </h2>
-                <p className="mt-4 max-w-2xl text-xl text-gray-500 mx-auto fade-in">
-                    Find the perfect cap for any occasion.
-                </p>
-            </div>
-
-            <div className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              
-                {loading ? (
-                    <p>Loading categories...</p>
-                ) : (
-                    filteredCategories.slice(0, 3).map(category => (
-                        <Category key={category.id}
-                            category={category.name}
-                            pic={category.products[0]?.image}
-                        />
-                    ))
-                )}
-
-            </div>
-        </div>
+    <div className="bg-gray-50 py-12 sm:py-16">
+  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="text-center">
+      <h2 className="text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl fade-in">
+        Shop By Category
+      </h2>
+      <p className="mt-4 max-w-2xl text-xl text-gray-500 mx-auto fade-in">
+        Find the perfect cap for any occasion.
+      </p>
     </div>
+
+    <div className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      {loading ? (
+        <div className="col-span-full flex justify-center items-center py-12">
+          <div className="h-10 w-10 border-4 border-black border-t-transparent rounded-full animate-spin"></div>
+        </div>
+      ) : (
+        filteredCategories.slice(0, 3).map(category => (
+          <Category
+            key={category.id}
+            category={category.name}
+            pic={category.products[0]?.image}
+          />
+        ))
+      )}
+    </div>
+  </div>
+</div>
+
   )
 }
 
