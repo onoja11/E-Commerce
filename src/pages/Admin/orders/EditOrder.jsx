@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "../../../api/axios";
+import LoadingSpinner from '../../../components/general/LoadingSpinner';
 import { useNavigate, useParams, Link } from 'react-router-dom';
 
 const EditOrder = () => {
@@ -11,6 +12,7 @@ const EditOrder = () => {
   const [orders, setOrders] = useState({})
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const [loadingOrder, setLoadingOrder] = useState(true)
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -37,6 +39,7 @@ const EditOrder = () => {
       })
       .then(response => {
         setOrders(response.data);
+        setLoadingOrder(false);
         setStatus(response.data.status);
         // setStatus(re)
       })
@@ -44,8 +47,11 @@ const EditOrder = () => {
         setOrders(null);
       });
     }
-  }, [token]);
+  }, [token, id]);
 
+  if (loadingOrder) {
+    return <LoadingSpinner/>
+  }
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-50">
       <div className="bg-white p-6 rounded-lg shadow-md w-full max-w-md">

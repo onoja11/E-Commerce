@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from "react";
 import axios from "../../../api/axios";
 import { useNavigate, useParams, Link } from 'react-router-dom';
+import LoadingSpinner from "../../../components/general/LoadingSpinner";
 
 const EditCategory = () => {
   const [name, setName] = useState("");
   const [success, setSuccess] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [loadingCategory, setLoadingCategory] = useState(true);
   const token = localStorage.getItem("token");
   const {id} = useParams();
   const [categories, setCategories] = useState({})
@@ -37,12 +39,18 @@ const EditCategory = () => {
       })
       .then(response => {
         setCategories(response.data);
+        setLoadingCategory(false);
       })
       .catch(() => {
         setCategories(null);
       });
     }
-  }, [token]);
+  }, [token, id]);
+
+
+  if (loadingCategory) {
+    return <LoadingSpinner/>
+  }
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-50">

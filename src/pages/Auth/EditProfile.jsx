@@ -29,9 +29,7 @@ const EditProfile = () => {
     setGeneralError("");
     setSuccess("");
     try {
-      // 1. Get CSRF cookie
        await axios.get("/sanctum/csrf-cookie");
-      // 2. Send update request
       const res = await axios.put("api/update/profile", {
         name: formData.name,
         email: formData.email,

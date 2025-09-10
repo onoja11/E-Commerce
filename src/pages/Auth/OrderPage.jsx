@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from '../../api/axios';
-import { SquarePen, Trash2, Package, Calendar, DollarSign, ShoppingBag } from "lucide-react";
+import { SquarePen, Trash2, Package, Calendar, ShoppingBag } from "lucide-react";
 import LoadingSpinner from "../../components/general/LoadingSpinner";
 
 const OrdersPage = () => {
@@ -168,7 +168,6 @@ const OrdersPage = () => {
                     {/* Total Amount */}
                     <div className="flex sm:flex-col items-center sm:items-end justify-between sm:justify-start text-right border-t border-gray-700 pt-4 sm:border-t-0 sm:pt-0 lg:ml-8">
                       <p className="text-gray-400 text-xs sm:text-sm font-light uppercase tracking-widest mb-0 sm:mb-1 flex items-center sm:block">
-                        <DollarSign className="w-4 h-4 mr-1 sm:hidden" />
                         Total
                       </p>
                       <p className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-black">

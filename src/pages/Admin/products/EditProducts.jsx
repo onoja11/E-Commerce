@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Package, Tag, DollarSign, FileText, Image, Plus } from 'lucide-react'
 import axios from '../../../api/axios'
 import { useNavigate, useParams } from 'react-router-dom'
+import LoadingSpinner from '../../../components/general/LoadingSpinner';
 
 const EditProducts = () => {
   const { id } = useParams();
@@ -20,7 +21,6 @@ const EditProducts = () => {
   const token = localStorage.getItem('token');
   const navigate = useNavigate();
 
-  // ✅ Fetch categories
   useEffect(() => {
     const fetchCategories = async () => {
       try {
@@ -37,7 +37,6 @@ const EditProducts = () => {
     fetchCategories();
   }, [token]);
 
-  // ✅ Fetch existing product details
   useEffect(() => {
     const fetchProduct = async () => {
       try {
@@ -52,7 +51,7 @@ const EditProducts = () => {
           price: product.price || '',
           category_id: product.category_id || '',
           stock: product.stock || '',
-          image: null // don’t auto-fill file input
+          image: null
         });
       } catch (error) {
         console.error('Error fetching product:', error.response?.data || error.message);
@@ -71,7 +70,6 @@ const EditProducts = () => {
     }));
   };
 
-  // ✅ Update product instead of creating new
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -98,7 +96,7 @@ const EditProducts = () => {
   };
 
   if (loadingProduct) {
-    return <p className="text-center text-gray-500">Loading product details...</p>
+    return <LoadingSpinner/>
   }
 
   return (
