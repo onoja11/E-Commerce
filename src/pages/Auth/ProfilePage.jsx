@@ -86,8 +86,7 @@ const ProfilePage = () => {
               <div className="w-24 h-24 sm:w-28 sm:h-28 lg:w-32 lg:h-32 bg-gradient-to-br from-white to-gray-300 rounded-full flex items-center justify-center text-2xl sm:text-3xl lg:text-4xl font-bold text-black border-4 border-white/30 transition-all duration-300 group-hover/avatar:scale-105 group-hover/avatar:shadow-2xl group-hover/avatar:shadow-white/20 shadow-lg">
                 {user.name ? user.name.charAt(0).toUpperCase() : "U"}
               </div>
-              {/* Online indicator */}
-              <div className="absolute bottom-1 right-1 w-5 h-5 sm:w-6 sm:h-6 bg-green-500 border-2 border-white rounded-full"></div>
+              
             </div>
 
             {/* User Info + Actions */}
