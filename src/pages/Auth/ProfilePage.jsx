@@ -172,34 +172,7 @@ const ProfilePage = () => {
           })}
         </div>
 
-        {/* Additional Info Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-          {/* Recent Activity Card */}
-          <div className="bg-white rounded-xl sm:rounded-2xl p-4 sm:p-6 shadow-lg border border-white/10">
-            <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-3 sm:mb-4 flex items-center gap-2">
-              <Package className="w-5 h-5" />
-              Recent Activity
-            </h3>
-            <div className="space-y-3">
-              {orders.slice(0, 3).map((order, index) => (
-                <div key={index} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                  <div>
-                    <p className="text-sm font-medium text-gray-900">Order #{order.id}</p>
-                    <p className="text-xs text-gray-500">
-                      {new Date(order.created_at).toLocaleDateString()}
-                    </p>
-                  </div>
-                  <span className="text-sm font-bold text-green-600">
-                    ${parseFloat(order.total_amount || 0).toFixed(2)}
-                  </span>
-                </div>
-              ))}
-              {orders.length === 0 && (
-                <p className="text-sm text-gray-500 text-center py-4">No recent orders</p>
-              )}
-            </div>
-          </div>
-        </div>
+        
       </div>
     </div>
   );
