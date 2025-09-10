@@ -4,6 +4,7 @@ import Product from "../../../components/general/Product";
 import axios from "../../../api/axios";
 import { Link, useNavigate } from 'react-router-dom'; 
 import LoadingSpinner from "../../../components/general/LoadingSpinner";
+import ProductSkeleton from "../../../components/general/ProductSkeleton";
 
 const ViewProducts = () => {
   const [products, setProducts] = useState([]);
@@ -45,7 +46,13 @@ const ViewProducts = () => {
     navigate(`/admin/product/${id}`)
   };
   if (loading) {
-    return <LoadingSpinner/>
+    return (
+       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 md:px-5 gap-8">
+            {Array.from({ length: 8 }).map(() => (
+              <ProductSkeleton/>
+            ))}
+          </div>
+    )
   } 
 
   return (

@@ -2,20 +2,25 @@ import React, { useEffect, useState } from 'react'
 import Product from '../general/Product'
 import Filter from './Filter'
 import axios from '../../api/axios'
-import {ChartBarStacked} from 'lucide-react'
+import { ChartBarStacked } from 'lucide-react'
+import ProductSkeleton from '../general/ProductSkeleton'
 
 const MainContent = () => {
   const [products, setProducts] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("all");
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
+        setLoading(true);
         const res = await axios.get('/api/products');
         setProducts(res.data);
       } catch (error) {
         console.error('Error fetching products:', error.response?.data || error.message);
-      } 
+      } finally {
+        setLoading(false);
+      }
     };
     fetchProducts();
   }, []);
@@ -41,34 +46,47 @@ const MainContent = () => {
         {/* Filters */}
         <Filter setSelectedCategory={setSelectedCategory} />
 
-        {/* Products Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 md:px-5 gap-8">
-          {filteredProducts.map((product) => (
-            <Product 
-              border="border border-gray-200 shadow-lg"
-              key={product.id}
-              name={product.name}
-              id={product.id}
-              route={product.id}
-              actionButtons= {'hidden'}
-              category={product.category.name}
-              description={product.description.length > 30 
-                ? product.description.substring(0, 30) + "..." 
-                : product.description}
-              price={product.price}
-              pic={product.image}
-              stock={product.stock}
-            />
-          ))}
-        </div>
-        <div className="flex justify-center mt-12">
-          {filteredProducts.length === 0 && (
-            <div>
-              <ChartBarStacked className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-              <p className="text-gray-400 text-lg">No products found in this category.</p>
+        {/* Loading Skeleton */}
+        {loading ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 md:px-5 gap-8">
+            {Array.from({ length: 8 }).map(() => (
+              <ProductSkeleton/>
+            ))}
+          </div>
+        ) : (
+          <>
+            {/* Products Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 md:px-5 gap-8">
+              {filteredProducts.map((product) => (
+                <Product
+                  border="border border-gray-200 shadow-lg"
+                  key={product.id}
+                  name={product.name}
+                  id={product.id}
+                  route={product.id}
+                  actionButtons={'hidden'}
+                  category={product.category.name}
+                  description={product.description.length > 30
+                    ? product.description.substring(0, 30) + "..."
+                    : product.description}
+                  price={product.price}
+                  pic={product.image}
+                  stock={product.stock}
+                />
+              ))}
             </div>
-          )}
-        </div>
+
+            {/* No Products Found */}
+            <div className="flex justify-center mt-12">
+              {filteredProducts.length === 0 && (
+                <div className="text-center">
+                  <ChartBarStacked className="w-16 h-16 text-gray-400 mx-auto mb-4" />
+                  <p className="text-gray-400 text-lg">No products found in this category.</p>
+                </div>
+              )}
+            </div>
+          </>
+        )}
       </div>
     </section>
   )
