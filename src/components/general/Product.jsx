@@ -25,12 +25,7 @@ const Product = ({
   const { addToCart } = useCart();
   const imageBaseUrl = axios.defaults.baseURL + '/storage/'; 
   const isOutOfStock = stock < 1;
-   const formatCurrency = (amount) => {
-    return new Intl.NumberFormat('en-NG', {
-      style: 'currency',
-      currency: 'NGN'
-    }).format(amount);
-  };
+   
 
   return (
     <div className={`${border} stagger-animation cursor-pointer glass-effect rounded-2xl overflow-hidden group relative ${isOutOfStock ? 'opacity-75' : ''}`}>
@@ -85,7 +80,7 @@ const Product = ({
 
         <div className="flex justify-between items-center">
           <span className={`font-bold text-xl ${isOutOfStock ? 'text-gray-500 line-through' : 'text-gray-400'}`}>
-            {formatCurrency(Number(price).toLocaleString())}
+            ₦{Number(price).toLocaleString()}
           </span>
 
           <button

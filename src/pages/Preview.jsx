@@ -74,7 +74,7 @@ const Preview = () => {
             <div className="relative">
               <div className="flex items-center space-x-4">
                 <span className="text-5xl font-bold bg-black bg-clip-text text-transparent">
-                  ${Number(product.price).toLocaleString()}
+                  ₦{Number(product.price).toLocaleString()}
                 </span>
               </div>
             </div>

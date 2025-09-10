@@ -13,12 +13,7 @@ const AddToCart = ({ isOpen, onClose }) => {
   const imageBaseUrl = axios.defaults.baseURL + '/storage/'; 
 
   const navigate = useNavigate();
-   const formatCurrency = (amount) => {
-    return new Intl.NumberFormat('en-NG', {
-      style: 'currency',
-      currency: 'NGN'
-    }).format(amount);
-  };
+   
 
   // Checkout handler
   const handleCheckout = async () => {
@@ -100,7 +95,7 @@ const AddToCart = ({ isOpen, onClose }) => {
               />
               <div className="flex-1">
                 <h3 className="font-medium text-sm">{item.name}</h3>
-                <p className="text-gray-500 text-sm">{formatCurrency(Number(item.price).toLocaleString())}</p>
+                <p className="text-gray-500 text-sm">₦{Number(item.price).toLocaleString()}</p>
                 <p className="text-gray-400 text-xs">Qty: {item.quantity}</p>
               </div>
               <button
