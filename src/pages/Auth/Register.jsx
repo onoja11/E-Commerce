@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from '../../api/axios'; 
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import {useToast} from '../../context/ToastContext';
-import { Link } from 'lucide-react';
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -55,7 +54,7 @@ const Register = () => {
       showToast("Registration successful", "success");
 
       // Redirect to login after 1s
-      // localStorage.setItem("user", JSON.stringify(res.data.user));
+      localStorage.setItem("user", JSON.stringify(res.data.user));
       const token = localStorage.setItem("token", res.data.token);
       setTimeout(() => {
         navigate("/");

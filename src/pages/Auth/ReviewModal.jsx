@@ -27,7 +27,7 @@ const ReviewModal = () => {
         console.log(res.data.review_status);
 
         if (res.data.review_status === "1") {
-          setTimeout(() => setShow(true), 20000); // wait 20s then show modal
+          setTimeout(() => setShow(true), 3000);
         }
       } catch (err) {
         console.error("Error fetching user:", err);
