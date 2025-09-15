@@ -57,7 +57,13 @@ const ReviewModal = () => {
         { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
       );
       setShow(false);
-      showToast("Your review has been saved.", "success");
+      if (action === "stop") {
+        showToast("You won't be asked for a review again.", "success");
+      } else if (action === "inActive") {
+        showToast("We'll remind you later to leave a review.", "success");
+      } else if (action === "active") {
+        showToast("Your review has been saved.", "success");
+      }
     } catch (err) {
       console.error("Failed to update review status:", err);
     }
