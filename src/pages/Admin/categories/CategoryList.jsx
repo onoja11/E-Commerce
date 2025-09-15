@@ -112,7 +112,7 @@ const CategoryList = () => {
                   {cat.name}
                 </td>
                 <td className="px-6 py-4 text-gray-700">
-                  {cat.products_count ?? 0}
+                  {cat.products?.length ?? 0}
                 </td>
                 <td className="px-6 py-4 text-gray-700">
                   {cat.created_at?.split("T")[0]}
