@@ -89,7 +89,7 @@ const AddToCart = ({ isOpen, onClose }) => {
           cart.map((item) => (
             <div key={item.id} className="flex items-center space-x-4">
               <img
-                src={imageBaseUrl+item.image}
+                src={item.image}
                 alt={item.name}
                 className="w-16 h-16 rounded-lg object-cover"
               />
