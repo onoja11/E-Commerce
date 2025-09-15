@@ -54,7 +54,6 @@ const Register = () => {
       showToast("Registration successful", "success");
 
       // Redirect to login after 1s
-      // localStorage.setItem("user", JSON.stringify(res.data.user));
       const token = localStorage.setItem("token", res.data.token);
       setTimeout(() => {
         navigate("/");
