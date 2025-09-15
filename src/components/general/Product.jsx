@@ -40,7 +40,7 @@ const Product = ({
             className={`w-full h-full object-center object-cover transition-transform duration-300 ${
               isOutOfStock ? 'grayscale group-hover:scale-100' : 'group-hover:scale-105'
             }`} 
-            src={imageBaseUrl + pic} 
+            src={pic} 
             alt={name} 
           />
 

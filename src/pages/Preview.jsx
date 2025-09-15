@@ -48,7 +48,7 @@ const Preview = () => {
             <div className="relative bg-gradient-to-br from-gray-900 to-gray-800 rounded-3xl p-3 card-hover">
               <div className="aspect-square relative overflow-hidden rounded-2xl">
                 <img 
-                  src={imageBaseUrl + product.image}
+                  src={image}
                   alt={product.name} 
                   className="w-full h-full object-cover" 
                 />
@@ -110,7 +110,7 @@ const Preview = () => {
 
               <div className="space-y-4">
                 <button className="w-full bg-gradient-to-r from-gray-700 via-gray-500 to-slate-800 hover:from-gray-700 hover:via-gray-600 hover:to-slate-500 text-white font-bold py-4 px-8 rounded-2xl text-lg transform hover:scale-105 transition-all duration-300 shadow-2xl neon-glow"
-                onClick={() => addToCart({ id:product.id, name: product.name, price:product.price, image: imageBaseUrl + product.image , quantity, stock: product.stock })} 
+                onClick={() => addToCart({ id:product.id, name: product.name, price:product.price, image:  product.image , quantity, stock: product.stock })} 
                   >
                   Add to Cart • ${(Number(product.price) * quantity).toLocaleString()}
                 </button>
