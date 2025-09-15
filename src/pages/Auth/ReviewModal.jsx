@@ -26,7 +26,7 @@ const ReviewModal = () => {
         setReviewStatus(res.data.review_status);
         console.log(res.data.review_status);
 
-        if (res.data.review_status === "1") {
+        if (res.data.review_status === "active") {
           setTimeout(() => setShow(true), 3000);
         }
       } catch (err) {
@@ -130,7 +130,7 @@ console.log(show);
           {/* Secondary Actions */}
           <div className="flex gap-2">
             <button
-              onClick={() => handleAction(0)}
+              onClick={() => handleAction('inActive')}
               className="flex-1 bg-white text-black px-4 py-2 rounded-md border-2 border-black font-medium hover:bg-gray-50 transition-colors duration-200 text-sm"
             >
               Maybe Later
@@ -138,6 +138,7 @@ console.log(show);
 
             <button
               onClick={() => handleAction("stop")}
+              
               className="flex-1 bg-white text-gray-600 px-4 py-2 rounded-md border border-gray-300 font-medium hover:bg-gray-50 hover:text-black transition-colors duration-200 text-sm"
             >
               Don't Ask Again
