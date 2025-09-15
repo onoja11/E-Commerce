@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import axios from '../../api/axios'; 
 import { Link, useNavigate } from 'react-router-dom';
-import {useToast} from '../../context/ToastContext';
+import { useToast } from '../../context/ToastContext';
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -11,14 +11,10 @@ const Register = () => {
     confirm_password: "",
   });
   
-    const [errors, setErrors] = useState({});
+  const [errors, setErrors] = useState({});
   const [generalError, setGeneralError] = useState("");
-  const [success, setSuccess] = useState("");
-  const [user, setUser] = useState(null);
   const navigate = useNavigate();
   const { showToast } = useToast();
-  
-    
 
   const handleChange = (e) => {
     setFormData({
@@ -31,16 +27,10 @@ const Register = () => {
     e.preventDefault();
     setErrors({});
     setGeneralError("");
-    setSuccess("");
-
-    // if (formData.password !== formData.confirm_password) {
-    //   setErrors({ confirm_password: ["Passwords do not match!"] });
-    //   return;
-    // }
 
     try {
       // 1. Get CSRF cookie
-       await axios.get("/sanctum/csrf-cookie");
+      await axios.get("/sanctum/csrf-cookie");
 
       // 2. Send registration request
       const res = await axios.post("api/register", {
@@ -50,11 +40,13 @@ const Register = () => {
         password_confirmation: formData.confirm_password,
       });
 
+      // ✅ Store both token and user
+      localStorage.setItem("token", res.data.token);
+      localStorage.setItem("user", JSON.stringify(res.data.user));
 
       showToast("Registration successful", "success");
 
-      // Redirect to login after 1s
-      const token = localStorage.setItem("token", res.data.token);
+      // Redirect to homepage after 1s
       setTimeout(() => {
         navigate("/");
       }, 1000);
@@ -69,23 +61,6 @@ const Register = () => {
       }
     }
   };
-  const token = localStorage.getItem("token");
-  useEffect(() => {
-    if (token) {
-      axios.get('/api/user', {
-        headers: { Authorization: `Bearer ${token}` }
-      })
-      .then(response => {
-        setUser(response.data);
-      })
-      .catch(() => {
-        localStorage.removeItem("token");
-        setUser(null);
-      });
-    }
-  }, [token]);
-  
-  localStorage.setItem("user", JSON.stringify(user));
 
   return (
     <div className='flex items-center justify-center min-h-screen mt-5 bg-gray-100'>
@@ -94,7 +69,6 @@ const Register = () => {
 
         <form onSubmit={handleRegister}>
           {generalError && <p className="text-red-500 text-center mb-4">{generalError}</p>}
-          {success && <p className="text-green-500 text-center mb-4">{success}</p>}
 
           {/* Name */}
           <div className='mb-4'>
