@@ -120,13 +120,7 @@ const CategoryList = () => {
                 <td className="px-6 py-4">
                   <div className="flex items-center space-x-2">
                     {/* View Products */}
-                    <Link
-                      to={`/admin/categories/${cat.id}/products`}
-                      className="p-1 text-blue-600 hover:text-blue-800 hover:bg-blue-50 rounded transition-colors"
-                      title="View Products"
-                    >
-                      <Eye className="h-4 w-4" />
-                    </Link>
+                    
                     {/* Edit */}
                     <Link
                       to={`/admin/categories/edit/${cat.id}`}
