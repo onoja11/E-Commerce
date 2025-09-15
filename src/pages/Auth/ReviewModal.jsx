@@ -5,6 +5,7 @@ import { useToast } from "../../context/ToastContext";
 const ReviewModal = () => {
   const [show, setShow] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [loadingRequest, setLoadingRequest] = useState(false);
   const [reviewStatus, setReviewStatus] = useState(null);
   const [formData, setFormData] = useState({
     comment: "",
@@ -20,10 +21,12 @@ const ReviewModal = () => {
   useEffect(() => {
     const fetchUser = async () => {
       try {
+        setLoadingRequest(true);
         const res = await axios.get("/api/user", {
           headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
         });
         setReviewStatus(res.data.review_status);
+        setLoadingRequest(false);
         console.log(res.data.review_status);
 
         if (res.data.review_status === "active") {
@@ -124,7 +127,8 @@ console.log(show);
             type="submit"
             className="w-full bg-black text-white px-4 py-3 rounded-md font-semibold hover:bg-gray-800 transition-colors duration-200 text-sm"
           >
-            Submit Review
+            {loadingRequest ? "Submitting..." : "Submit Review"}
+            
           </button>
 
           {/* Secondary Actions */}
