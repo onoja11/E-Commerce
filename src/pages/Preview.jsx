@@ -7,7 +7,6 @@ const Preview = () => {
   const { id } = useParams();
   const [product, setProduct] = useState({});
   const [quantity, setQuantity] = useState(1);
-  const imageBaseUrl = axios.defaults.baseURL + '/storage/'; // Base URL for images
 
   const { addToCart } = useCart();
 
@@ -48,7 +47,7 @@ const Preview = () => {
             <div className="relative bg-gradient-to-br from-gray-900 to-gray-800 rounded-3xl p-3 card-hover">
               <div className="aspect-square relative overflow-hidden rounded-2xl">
                 <img 
-                  src={image}
+                  src={product.image}
                   alt={product.name} 
                   className="w-full h-full object-cover" 
                 />
