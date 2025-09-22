@@ -111,7 +111,7 @@ const Preview = () => {
                 <button className="w-full bg-gradient-to-r from-gray-700 via-gray-500 to-slate-800 hover:from-gray-700 hover:via-gray-600 hover:to-slate-500 text-white font-bold py-4 px-8 rounded-2xl text-lg transform hover:scale-105 transition-all duration-300 shadow-2xl neon-glow"
                 onClick={() => addToCart({ id:product.id, name: product.name, price:product.price, image:  product.image , quantity, stock: product.stock })} 
                   >
-                  Add to Cart • ${(Number(product.price) * quantity).toLocaleString()}
+                  Add to Cart • ₦{(Number(product.price) * quantity).toLocaleString()}
                 </button>
               </div>
             </div>
