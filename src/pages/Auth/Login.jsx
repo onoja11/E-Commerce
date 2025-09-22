@@ -8,7 +8,7 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const {loading, setLoading} = useState(false);
+  const [user, setUser] = useState(null);
   const navigate = useNavigate();
   const { showToast } = useToast();
 
@@ -18,7 +18,6 @@ const Login = () => {
     setError("");
 
     try {
-      setLoading(true);
       await axios.get("/sanctum/csrf-cookie");
       const response = await axios.post("api/login", {
         email,
@@ -27,7 +26,7 @@ const Login = () => {
       console.log(response.data);
           localStorage.setItem("token", response.data.token);
           localStorage.setItem("user", JSON.stringify(response.data.user));
-          setLoading(false);
+      setUser(response.data.user);
 
 
       navigate( "/");
@@ -71,8 +70,7 @@ const Login = () => {
             type='submit'
             className='w-full bg-gradient-to-r from-black via-gray-500 to-gray-800 text-white py-3 rounded-lg hover:bg-gradient-to-l transition-all duration-300 font-semibold shadow-lg hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-black'
           >
-            {loading ? 'Logging in...' : 'Login'}
-            
+            Login
           </button>
 
           <div className="bg-black/50 p-[0.5px] my-8"></div>
