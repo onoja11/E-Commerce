@@ -99,6 +99,7 @@ const Navbar = () => {
         headers: { Authorization: `Bearer ${token}` }
       });
       localStorage.removeItem("token");
+      localStorage.removeItem("user");
       showToast("Logged out successfully", "success");
       setIsMobileMenuOpen(false);
       window.location = "/";
