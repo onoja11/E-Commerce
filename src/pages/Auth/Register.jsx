@@ -13,6 +13,7 @@ const Register = () => {
   
   const [errors, setErrors] = useState({});
   const [generalError, setGeneralError] = useState("");
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { showToast } = useToast();
 
@@ -29,6 +30,7 @@ const Register = () => {
     setGeneralError("");
 
     try {
+      setLoading(true);
       // 1. Get CSRF cookie
       await axios.get("/sanctum/csrf-cookie");
 
@@ -40,9 +42,9 @@ const Register = () => {
         password_confirmation: formData.confirm_password,
       });
 
-      // ✅ Store both token and user
       localStorage.setItem("token", res.data.token);
       localStorage.setItem("user", JSON.stringify(res.data.user));
+      setLoading(false);
 
       showToast("Registration successful", "success");
 
@@ -125,7 +127,7 @@ const Register = () => {
             type='submit'
             className='w-full bg-gradient-to-r from-black via-gray-500 to-gray-800 text-white py-3 rounded-lg hover:bg-gradient-to-l transition-all duration-300 font-semibold shadow-lg hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-black'
           >
-            Register
+            {loading ? 'Registering...' : 'Register'}
           </button>
 
           <div className="bg-black/50 p-[0.5px] my-8"></div>

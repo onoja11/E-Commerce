@@ -46,7 +46,8 @@ const Navbar = () => {
  
 
   const token = localStorage.getItem("token");
-  const [user, setUser] = useState(null);
+  const user = localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user")) : null;  
+  // const [user, setUser] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
@@ -99,6 +100,7 @@ const Navbar = () => {
         headers: { Authorization: `Bearer ${token}` }
       });
       localStorage.removeItem("token");
+      localStorage.removeItem("user");
       showToast("Logged out successfully", "success");
       setIsMobileMenuOpen(false);
       window.location = "/";
